@@ -168,23 +168,23 @@ class Connect4State:
         diagonal of 4 pieces.
     """
 
-    def __init__(self):
+    def __init__(self, width=7, height=6):
         self.playerJustMoved = 2  # At the root pretend the player just moved is p2 - p1 has the first move
         self.board = []  # 0 = empty, 1 = player 1, 2 = player 2
         self.winner = 0 # No winner yet
 
-        self.width = 7
-        self.height = 6
+        self.width = width
+        self.height = height
         for y in range(self.width):
             self.board.append([0] * self.height) # six zeroes in each column
 
     def Clone(self):
         """ Create a deep clone of this game state.
         """
-        st = Connect4State()
+        st = Connect4State(width=self.width, height=self.height)
         st.playerJustMoved = self.playerJustMoved
         st.winner = self.winner
-        st.board = [self.board[col][:] for col in range(7)]
+        st.board = [self.board[col][:] for col in range(self.width)]
         return st
 
     def DoMove(self, movecol):
@@ -192,8 +192,8 @@ class Connect4State:
             Must update playerToMove.
         """
 
-        assert movecol >= 0 and movecol <= 6 and self.board[movecol][5] == 0
-        row = 5
+        assert movecol >= 0 and movecol <= self.width and self.board[movecol][self.height - 1] == 0
+        row = self.height - 1
         while row >= 0 and self.board[movecol][row] == 0:
             row -= 1 # find the first occupied row (or 0 for the bottom of the board
 
@@ -209,7 +209,7 @@ class Connect4State:
         """
         if self.winner != 0:
             return [] # no moves since someone has already won (in DoMove())
-        return [col for col in range(7) if self.board[col][5] == 0] # columns a list of columns with space
+        return [col for col in range(self.width) if self.board[col][self.height - 1] == 0] # columns a list of columns with space
 
     def DoesMoveWin(self, x, y):
         """ Does the move at (x,y) win by forming a row, column or diagonal of length at least 4?
@@ -232,7 +232,7 @@ class Connect4State:
         return False
 
     def IsOnBoard(self, x, y):
-        return x >= 0 and x < 7 and y >= 0 and y < 6
+        return x >= 0 and x < self.width and y >= 0 and y < self.height
 
     def GetResult(self, playerjm):
         """ Get the game result from the viewpoint of playerjm.
@@ -241,18 +241,10 @@ class Connect4State:
 
     def __repr__(self):
         s = ""
-        for x in range(5, -1, -1):
-            for y in range(7):
-                s += ".XO"[self.board[y][x]]
-            s += "\n"
-        return s
-
-    def __repr__(self):
-        s = ""
-        for x in range(5, -1, -1):
-            for y in range(7):
+        for x in range(self.height - 1, -1, -1):
+            for y in range(self.width):
                 s += [Fore.WHITE + '.', Fore.RED + 'X', Fore.YELLOW + 'O'][self.board[y][x]]
-                s += Fore.RESET + ''
+                s += Fore.RESET
             s += "\n"
         return s
 
@@ -363,14 +355,14 @@ def UCTPlayGame():
     """
     # state = OXOState() # uncomment to play OXO
     # state = NimState(5)  # uncomment to play Nim with the given number of starting chips
-    state = Connect4State()
+    state = Connect4State(width=5, height=5)
     while (state.GetMoves() != []):  # while not terminal state
         print(str(state))
         if state.playerJustMoved == 1:
             # m = UCT(rootstate=state, itermax=10, verbose=False)  # play with values for itermax and verbose = True
             m = human_input(state)
         else:
-            m = UCT(rootstate=state, itermax=10, verbose=True)  # play with values for itermax and verbose = True
+            m = UCT(rootstate=state, itermax=8000, verbose=False)  # play with values for itermax and verbose = True
         print("Best Move: " + str(m) + "\n")
         state.DoMove(m)
     if state.GetResult(state.playerJustMoved) == 1.0:
