@@ -15,6 +15,7 @@
 #
 # For more information about Monte Carlo Tree Search check out our web site at www.mcts.ai
 
+from __future__ import division
 from math import *
 import random
 
@@ -58,107 +59,6 @@ class GameState:
         """ Don't need this - but good style.
         """
         pass
-
-
-class NimState:
-    """ A state of the game Nim. In Nim, players alternately take 1,2 or 3 chips with the
-        winner being the player to take the last chip.
-        In Nim any initial state of the form 4n+k for k = 1,2,3 is a win for player 1
-        (by choosing k) chips.
-        Any initial state of the form 4n is a win for player 2.
-    """
-
-    def __init__(self, ch):
-        self.playerJustMoved = 2  # At the root pretend the player just moved is p2 - p1 has the first move
-        self.chips = ch
-
-    def Clone(self):
-        """ Create a deep clone of this game state.
-        """
-        st = NimState(self.chips)
-        st.playerJustMoved = self.playerJustMoved
-        return st
-
-    def DoMove(self, move):
-        """ Update a state by carrying out the given move.
-            Must update playerJustMoved.
-        """
-        assert move >= 1 and move <= 3 and move == int(move)
-        self.chips -= move
-        self.playerJustMoved = 3 - self.playerJustMoved
-
-    def GetMoves(self):
-        """ Get all possible moves from this state.
-        """
-        return list(range(1, min([4, self.chips + 1])))
-
-    def GetResult(self, playerjm):
-        """ Get the game result from the viewpoint of playerjm.
-        """
-        assert self.chips == 0
-        if self.playerJustMoved == playerjm:
-            return 1.0  # playerjm took the last chip and has won
-        else:
-            return 0.0  # playerjm's opponent took the last chip and has won
-
-    def __repr__(self):
-        s = "Chips:" + str(self.chips) + " JustPlayed:" + str(self.playerJustMoved)
-        return s
-
-
-class OXOState:
-    """ A state of the game, i.e. the game board.
-        Squares in the board are in this arrangement
-        012
-        345
-        678
-        where 0 = empty, 1 = player 1 (X), 2 = player 2 (O)
-    """
-
-    def __init__(self):
-        self.playerJustMoved = 2  # At the root pretend the player just moved is p2 - p1 has the first move
-        self.board = [0, 0, 0, 0, 0, 0, 0, 0, 0]  # 0 = empty, 1 = player 1, 2 = player 2
-
-    def Clone(self):
-        """ Create a deep clone of this game state.
-        """
-        st = OXOState()
-        st.playerJustMoved = self.playerJustMoved
-        st.board = self.board[:]
-        return st
-
-    def DoMove(self, move):
-        """ Update a state by carrying out the given move.
-            Must update playerToMove.
-        """
-        assert move >= 0 and move <= 8 and move == int(move) and self.board[move] == 0
-        self.playerJustMoved = 3 - self.playerJustMoved
-        self.board[move] = self.playerJustMoved
-
-    def GetMoves(self):
-        """ Get all possible moves from this state.
-        """
-        return [i for i in range(9) if self.board[i] == 0]
-
-    def GetResult(self, playerjm):
-        """ Get the game result from the viewpoint of playerjm for a finished game.
-        """
-        for (x, y, z) in [(0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8), (2, 4, 6)]:
-            if self.board[x] == self.board[y] == self.board[z]:
-                if self.board[x] == playerjm:
-                    return 1.0
-                else:
-                    return 0.0
-        if self.GetMoves() == []: return 0.5  # draw
-        assert False  # Should not be possible to get here
-
-    def __repr__(self):
-        s = ""
-        for i in range(9):
-            s += ".XO"[self.board[i]]
-            if i % 3 == 2: s += "\n"
-        return s
-
 
 class Connect4State:
     """ A state of the game of Connect4, i.e. the game board.
@@ -340,13 +240,17 @@ def UCT(rootstate, itermax, verbose=False):
             node.Update(state.GetResult(node.playerJustMoved))  # Update node with result from POV of node.playerJustMoved
             node = node.parentNode
 
+        # Selection # return the move that was most visited
+        # move = sorted(rootnode.childNodes, key=lambda c: c.visits)[-1].move
+        move = sorted(rootnode.childNodes, key=lambda c: c.wins / c.visits)[-1].move
+
     # Output some information about the tree - can be omitted
     if (verbose):
         print(rootnode.TreeToString(0))
     else:
         print(rootnode.ChildrenToString())
 
-    return sorted(rootnode.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
+    return move 
 
 
 def UCTPlayGame():
@@ -355,14 +259,14 @@ def UCTPlayGame():
     """
     # state = OXOState() # uncomment to play OXO
     # state = NimState(5)  # uncomment to play Nim with the given number of starting chips
-    state = Connect4State(width=5, height=5)
+    state = Connect4State(width=7, height=6)
     while (state.GetMoves() != []):  # while not terminal state
         print(str(state))
         if state.playerJustMoved == 1:
             # m = UCT(rootstate=state, itermax=10, verbose=False)  # play with values for itermax and verbose = True
             m = human_input(state)
         else:
-            m = UCT(rootstate=state, itermax=8000, verbose=False)  # play with values for itermax and verbose = True
+            m = UCT(rootstate=state, itermax=20000, verbose=False)  # play with values for itermax and verbose = True
         print("Best Move: " + str(m) + "\n")
         state.DoMove(m)
     if state.GetResult(state.playerJustMoved) == 1.0:
@@ -379,7 +283,7 @@ def human_input(state):
     valid_moves = state.GetMoves()
     move = ''
     while move not in valid_moves:
-        move = int(raw_input("Possible moves are: " + str(valid_moves)))
+        move = int(raw_input("Possible moves are: " + str(valid_moves) + ' '))
     return move
 
 
