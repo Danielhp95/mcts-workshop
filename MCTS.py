@@ -50,10 +50,12 @@ class GameState:
     def GetMoves(self):
         """ Get all possible moves from this state.
         """
+        pass
 
     def GetResult(self, playerjm):
         """ Get the game result from the viewpoint of playerjm.
         """
+        pass
 
     def __repr__(self):
         """ Don't need this - but good style.
@@ -263,10 +265,10 @@ def UCTPlayGame():
     while (state.GetMoves() != []):  # while not terminal state
         print(str(state))
         if state.playerJustMoved == 1:
-            # m = UCT(rootstate=state, itermax=10, verbose=False)  # play with values for itermax and verbose = True
-            m = human_input(state)
+            # m = UCT(rootstate=state, itermax=10000, verbose=False)  # play with values for itermax and verbose = True
+            m = UCT(rootstate=state, itermax=10002, verbose=False)  # play with values for itermax and verbose = True
         else:
-            m = UCT(rootstate=state, itermax=20000, verbose=False)  # play with values for itermax and verbose = True
+            m = human_input(state)
         print("Best Move: " + str(m) + "\n")
         state.DoMove(m)
     if state.GetResult(state.playerJustMoved) == 1.0:
@@ -281,9 +283,11 @@ def UCTPlayGame():
 
 def human_input(state):
     valid_moves = state.GetMoves()
-    move = ''
+    move = -1
     while move not in valid_moves:
-        move = int(raw_input("Possible moves are: " + str(valid_moves) + ' '))
+        interface_moves = [move + 1 for move in valid_moves]
+        move = int(raw_input("Possible moves are: " + str(interface_moves) + ' '))
+        move -= 1
     return move
 
 

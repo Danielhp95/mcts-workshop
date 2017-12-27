@@ -13,19 +13,12 @@ from colorama import Fore
 
 
 class GameState:
-    """ A state of the game, i.e. the game board. These are the only functions which are
-        absolutely necessary to implement UCT in any 2-player complete information deterministic
-        zero-sum game, although they can be enhanced and made quicker, for example by using a
-        GetRandomMove() function to generate a random move during rollout.
-        By convention the players are numbered 1 and 2.
-    """
-
     """
         Un GameState representa una configuracion valida del 'estado' de un juego.
         Por ejemplo, las posiciones de todas las piezas activas en una partida de ajedrez.
         Las funciones presentadas en esta clase son las minimas necesarias
         para la implementacion del algoritmo UCT para cualquier juego de 2-jugadores,
-        de informacion completa, deterministico y zero-sum. 
+        de informacion completa, deterministico y zero-sum.
         (mas informacion sobre estos terminos en https://github.com/Danielhp95/mcts-workshop)
 
     """
@@ -59,6 +52,7 @@ class GameState:
         """
         pass
 
+
 class Connect4State:
     """
         GameState para el juego de 4 en Raya (Connect4 en ingles).
@@ -72,7 +66,7 @@ class Connect4State:
     def __init__(self, width=7, height=6):
         self.playerJustMoved = 2  # Al empezar el juego se considera que el jugador 2 ha hecho un movimiento. Que es equivalente a decir que el jugador 1 empieza.
         self.board = []  # 0 = vacio, 1 = jugador 1 (X), 2 = jugador 2 (O)
-        self.winner = 0 # No winner yet
+        self.winner = 0 # 0 = ningun ganador, 1 = jugador 1 ha ganado, 2 = jugador 2 ha ganado.
 
         self.width = width
         self.height = height
@@ -96,25 +90,23 @@ class Connect4State:
         assert movecol >= 0 and movecol <= self.width and self.board[movecol][self.height - 1] == 0
         row = self.height - 1
         while row >= 0 and self.board[movecol][row] == 0:
-            row -= 1 # find the first occupied row (or 0 for the bottom of the board
+            row -= 1 # encuentra la primera fila ocupada (o 0 si no hay ninguna ficha en la columna)
 
-        row += 1 # the first empty space in movecol
+        row += 1 # el primer espacio libre en la columna
 
-        self.playerJustMoved = 3 - self.playerJustMoved # new player
-        self.board[movecol][row] = self.playerJustMoved # drop the counter
+        self.playerJustMoved = 3 - self.playerJustMoved # siguiente jugador
+        self.board[movecol][row] = self.playerJustMoved # coloca la ficha en la celda correcta
         if self.DoesMoveWin(movecol, row):
-            self.winner = self.playerJustMoved # record the win
+            self.winner = self.playerJustMoved # apunta el ganador de la partida
 
     def GetMoves(self):
-        """ Devuelve una arry con todos los movimientos posibles - todas las columnas que tienen un espacio libre.
+        """ Devuelve una array con todos los movimientos posibles - todas las columnas que tienen un espacio libre.
         """
         if self.winner != 0:
             return [] # ningun movimiento posible dado que hay un ganador (in DoMove())
         return [col for col in range(self.width) if self.board[col][self.height - 1] == 0] # lista de columnas con espacio libre
 
     def DoesMoveWin(self, x, y):
-        """ Does the move at (x,y) win by forming a row, column or diagonal of length at least 4?
-        """
         """ Comprueba si el movimiento en la posicion (x,y) genera una linea (columna, fila o diagonal) de longitud 4 (o mayor).
         """
         me = self.board[x][y]
@@ -138,7 +130,7 @@ class Connect4State:
         return x >= 0 and x < self.width and y >= 0 and y < self.height
 
     def GetResult(self, playerjm):
-        """ Get the game result from the viewpoint of playerjm.
+        """ Devuelve el ganador de la partida desde el punto de vista de playerjm.
         """
         return playerjm == self.winner
 
@@ -153,30 +145,29 @@ class Connect4State:
 
 
 class Node:
-    """ A node in the game tree. self.wins is always from the viewpoint of playerJustMoved.
-        Crashes if state not specified.
-    """
+    """ Un nodo del game treee. self.wins siempre esta desde el punto de vista de playerJustMoved. (aclarar)
+    """ 
 
     def __init__(self, move=None, parent=None, state=None):
-        self.move = move  # the move that got us to this node - "None" for the root node
-        self.parentNode = parent  # "None" for the root node
+        self.move = move  # el move que se hizo en un state previo para llegar a este estado. "None" para el nodo raiz.
+        self.parentNode = parent  # "None" para el nodo raiz
         self.childNodes = []
         self.wins = 0
         self.visits = 0
-        self.untriedMoves = state.GetMoves()  # future child nodes
+        self.untriedMoves = state.GetMoves()  # Futuros nodos hijo
         self.playerJustMoved = state.playerJustMoved  # the only part of the state that the Node needs later
 
     def UCTSelectChild(self):
-        """ Use the UCB1 formula to select a child node. Often a constant UCTK is applied so we have
-            lambda c: c.wins/c.visits + UCTK * sqrt(2*log(self.visits)/c.visits to vary the amount of
-            exploration versus exploitation.
+        """ Usa la formula de UCB1 para seleccionar uno de los nodos hijo: 
+                lambda child: child.wins/child.visits + const * sqrt(2*log(self.visits)/child.visits)
+            la constante se usa para escoger entre exploracion o explotacion.
         """
         s = sorted(self.childNodes, key=lambda c: c.wins / c.visits + sqrt(2 * log(self.visits) / c.visits))[-1]
         return s
 
     def AddChild(self, m, s):
-        """ Remove m from untriedMoves and add a new child node for this move.
-            Return the added child node
+        """ Quita m de la array untriedMoves y anhade un nuevo nodo hijo para este movimiento
+            se devuelve el nodo hijo que se ha anhadido.
         """
         n = Node(move=m, parent=self, state=s)
         self.untriedMoves.remove(m)
@@ -184,11 +175,15 @@ class Node:
         return n
 
     def Update(self, result):
-        """ Update this node - one additional visit and result additional wins. Result must be from the viewpoint of playerJustmoved.
+        """ Actualiza las estadisticas guardadas en este nodo. 
+            Anhade una visita al contador de visitas del nodo, anhade el resultado (win/lose) desde el punto de vista del playerJustMoved
+            One additional visit and result additional wins. Result must be from the viewpoint of playerJustmoved.
         """
         self.visits += 1
         self.wins += result
 
+    """ Funciones para debuggear y modo verbose
+    """
     def __repr__(self):
         return "[M:" + str(self.move) + " W/V:" + str(self.wins) + "/" + str(self.visits) + " U:" + str(
             self.untriedMoves) + "]"
@@ -224,7 +219,7 @@ def UCT(rootstate, itermax, verbose=False):
         state = rootstate.Clone()
 
         # Select
-        while node.untriedMoves == [] and node.childNodes != []:  # node is fully expanded and non-terminal
+        while node.untriedMoves == [] and node.childNodes != []:  # Mientras el nodo este completamente expandido y non sea terminal
             node = node.UCTSelectChild()
             state.DoMove(node.move)
 
@@ -253,15 +248,13 @@ def UCT(rootstate, itermax, verbose=False):
     else:
         print(rootnode.ChildrenToString())
 
-    return move 
+    return move
 
 
 def UCTPlayGame():
     """ Play a sample game between two UCT players where each player gets a different number
         of UCT iterations (= simulations = tree nodes).
     """
-    # state = OXOState() # uncomment to play OXO
-    # state = NimState(5)  # uncomment to play Nim with the given number of starting chips
     state = Connect4State(width=7, height=6)
     while (state.GetMoves() != []):  # while not terminal state
         print(str(state))
@@ -284,7 +277,7 @@ def UCTPlayGame():
 
 def human_input(state):
     valid_moves = state.GetMoves()
-    move = -1
+    move = None
     while move not in valid_moves:
         interface_moves = [move + 1 for move in valid_moves]
         move = int(raw_input("Possible moves are: " + str(interface_moves) + ' '))
