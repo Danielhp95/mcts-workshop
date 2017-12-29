@@ -1,7 +1,9 @@
 
 ## Reinforcement learning
 
-One measure of complexity of the Connect Four game is the number of possible games board positions. For classic Connect Four played on 6 high, 7 wide grid, there are 4,531,985,219,092 positions[3] for all game boards populated with 0 to 42 pieces.
+![alt text](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram.png "Diagrama Reinforcement Learning")
+
+
 El juego de 4 en raya tiene 4,531,985,219,092 combinaciones posibles.
 
 ## Monte Carlo Tree Search (MCTS)
@@ -10,7 +12,7 @@ MCTS es un metodo de Monte Carlo. Los elementos de Monte Carlo se basan en la si
 
 Para ser mas concretos, nos interesa aprender la accion optima que tomar en cada estado del juego. Este concepto se encapsula en la funcion $Q(s,a)$
 
-![alt text](https://github.com/Danielhp95/mcts-workshop/blob/master/images/UCT-diagram.png "diagrama MCTS-UCT")
+![alt text](https://github.com/Danielhp95/mcts-workshop/blob/master/images/UCT-diagram.png "Diagrama MCTS-UCT")
   
 
 ### Propiedades de metodos Monte Carlo
