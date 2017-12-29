@@ -10,8 +10,8 @@ MCTS es un metodo de Monte Carlo. Los elementos de Monte Carlo se basan en la si
 
 Para ser mas concretos, nos interesa aprender la accion optima que tomar en cada estado del juego. Este concepto se encapsula en la funcion $Q(s,a)$
 
-![alt text](https://github.com/Danielhp95/mcts-workshop/images/UCT-diagram.png "diagrama MCTS-UCT")
-
+![alt text](https://github.com/Danielhp95/mcts-workshop/blob/master/images/UCT-diagram.png "diagrama MCTS-UCT")
+  
 
 ### Propiedades de metodos Monte Carlo
 
