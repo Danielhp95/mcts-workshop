@@ -26,7 +26,7 @@ Un agente en RL (reinforcement learning) procesa una representacion interna del 
 
 ### Acciones
 
-En el instante *t* el agente "observa" el estado *s<sub>t</sub>*. Tras "observar" el estado *s<sub>t</sub>*, el agente debe tomar una accion
+En el instante *t* el agente "observa" el estado *s<sub>t</sub>*. Tras "observar" el estado *s<sub>t</sub>*, el agente escoge que accion *a<sub>t</sub>* va a llevar a cabo usando una **estrategia** ![alt text](https://latex.codecogs.com/gif.latex?a_t%20%5Cpi%28a_t%20%7C%20s_t%29 pi)
 
 El agente recibe un estado, utiliza una estrategia (policy) para escoger una decision.
 Su accion modifica el entorno, que devuelve un nuevo estado y una recompensa.
