@@ -5,11 +5,11 @@
 
 ![alt text](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram.png "Diagrama Reinforcement Learning")
 
-El 4 en raya es episodico. Merece mencion?
+Reinforcement Learning es una rama de inteligencia artificial basada en el concepto de "prueba y error". Un algoritmo generico de Reinforcement Learning presenta un **agente** que actua en un **entorno** y recibe **recompensa** positiva o negativa a traves de sus **acciones**. 
 
 ## Loop de Reinforcement Learning.
 
-Por cada momento *t*:
+Por cada escalon de tiempo *t*:
 * El Agente:
   1. Recibe recompensa *r<sub>t</sub>*
   2. Recibe observacion *s<sub>t</sub>*
