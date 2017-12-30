@@ -22,18 +22,20 @@ Por cada momento *t*:
 
 ### Estados
 
-Un agente en RL (reinforcement learning) procesa una representacion interna del entorno. Para cada instante *t*, *s<sub>t</sub>* es la representacion del estado del entorno. Escoger una buena representacion del estado *s<sub>t</sub>* puede ser una tarea muy dificil, y una buena representacion puede simplificar mucho la tarea de aprendizaje. Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla. Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados. Esto quiere decir que hay 4,531,985,219,092 posibles configuraciones del tablero.
+Un agente en RL (reinforcement learning) procesa una representacion interna del entorno. Para cada instante *t*, *s<sub>t</sub>* es la representacion del estado del entorno. Escoger una buena representacion del estado *s<sub>t</sub>* puede ser una tarea muy dificil, y una buena representacion puede simplificar mucho la tarea de aprendizaje.
+
+Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla. Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados. Esto quiere decir que hay 4,531,985,219,092 posibles configuraciones del tablero.
 
 ### Acciones
 
-En el instante *t* el agente "observa" el estado *s<sub>t</sub>*. Tras "observar" el estado *s<sub>t</sub>*, el agente escoge que accion *a<sub>t</sub>* va a llevar a cabo usando una **estrategia** ![alt text](https://latex.codecogs.com/gif.latex?a_t%20%5Cpi%28a_t%20%7C%20s_t%29 pi)
+En el instante *t* el agente "observa" el estado *s<sub>t</sub>*. Tras "observar" el estado *s<sub>t</sub>*, el agente escoge que accion *a<sub>t</sub>* va a llevar a cabo usando una **estrategia** ![policy](https://latex.codecogs.com/gif.latex?a_t%20%5Cpi%28a_t%20%7C%20s_t%29 pi). Una estrategia es un mapeado de estados a acciones. Asumiendo una estrategia (pi) deterministica), dado un estado *s<sub>t</sub>*, (pi(s_t)) asigna una accion *a<sub>t</sub>*. (a_t = pi(s_t)). La accion *a<sub>t</sub>* se lleva a cabo en el entorno. Un vez el entorno se haya modificado, este devolvera un estado *s<sub>t+1</sub>* junto con una recompensa *r<sub>t+1</sub>*.
 
-El agente recibe un estado, utiliza una estrategia (policy) para escoger una decision.
-Su accion modifica el entorno, que devuelve un nuevo estado y una recompensa.
+
+
 La estrategia es un mapeado (asignacion) de estados a acciones.
 El objetivo de los problemas de RL se basan en encontrar una estrategia optima para el problema en cuestion. Donde optimo se considera que se consige la mayor recompensa posible.
 
-![alt text](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram.png "Diagrama Reinforcement Learning")
+![rl loop](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram.png "Diagrama Reinforcement Learning")
 
 ### Recompensa
 
@@ -45,7 +47,7 @@ MCTS es un metodo de Monte Carlo. Los elementos de Monte Carlo se basan en la si
 
 Para ser mas concretos, nos interesa aprender la accion optima que tomar en cada estado del juego. Este concepto se encapsula en la funcion $Q(s,a)$
 
-![alt text](https://github.com/Danielhp95/mcts-workshop/blob/master/images/UCT-diagram.png "Diagrama MCTS-UCT")
+![mcts diagram](https://github.com/Danielhp95/mcts-workshop/blob/master/images/UCT-diagram.png "Diagrama MCTS-UCT")
   
 
 ### Propiedades de metodos Monte Carlo
