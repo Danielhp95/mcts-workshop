@@ -22,13 +22,13 @@ Por cada escalon de tiempo *t*:
 
 ### Estados
 
-Un agente en RL (reinforcement learning) procesa una representacion interna del entorno. Para cada instante *t*, *s<sub>t</sub>* es la representacion del estado del entorno. Escoger una buena representacion del estado *s<sub>t</sub>* puede ser una tarea muy dificil, y una buena representacion puede simplificar mucho la tarea de aprendizaje.
+Set de posibles estados de un entorno (S). Un agente en RL (reinforcement learning) procesa una representacion interna del entorno. Para cada instante *t*, *s<sub>t</sub>* es la representacion del estado del entorno. Escoger una buena representacion del estado *s<sub>t</sub>* puede ser una tarea muy dificil, y una buena representacion puede simplificar mucho la tarea de aprendizaje.
 
 Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla. Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados. Esto quiere decir que hay 4,531,985,219,092 posibles configuraciones del tablero.
 
 ### Acciones
 
-En el instante *t* el agente "observa" el estado *s<sub>t</sub>*. Tras "observar" el estado *s<sub>t</sub>*, el agente escoge que accion *a<sub>t</sub>* va a llevar a cabo usando una **estrategia** ![policy](https://latex.codecogs.com/gif.latex?a_t%20%5Cpi%28a_t%20%7C%20s_t%29 pi). Una estrategia es un mapeado de estados a acciones. Asumiendo una estrategia (pi) deterministica), dado un estado *s<sub>t</sub>*, (pi(s_t)) asigna una accion *a<sub>t</sub>*. (a_t = pi(s_t)). La accion *a<sub>t</sub>* se lleva a cabo en el entorno. Un vez el entorno se haya modificado, este devolvera un estado *s<sub>t+1</sub>* junto con una recompensa *r<sub>t+1</sub>*.
+Set de posibles acciones de un agente (A). En el instante *t* el agente "observa" el estado *s<sub>t</sub>*. Tras "observar" el estado *s<sub>t</sub>*, el agente escoge que accion *a<sub>t</sub>* va a llevar a cabo usando una **estrategia** ![policy](https://latex.codecogs.com/gif.latex?a_t%20%5Cpi%28a_t%20%7C%20s_t%29 pi). Una estrategia es un mapeado de estados a acciones. Asumiendo una estrategia (pi) deterministica), dado un estado *s<sub>t</sub>*, (pi(s_t)) asigna una accion *a<sub>t</sub>*. (a_t = pi(s_t)). La accion *a<sub>t</sub>* se lleva a cabo en el entorno. Un vez el entorno se haya modificado, este devolvera un estado *s<sub>t+1</sub>* junto con una recompensa *r<sub>t+1</sub>*.
 
 
 
