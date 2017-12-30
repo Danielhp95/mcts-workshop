@@ -11,7 +11,11 @@ Acciones, set de acciones (en cuatro en raya tienes 6)
 
 ### Estados
 
-Un agente en RL (reinforcement learning) proces una representacion interna del entorno. Para el momento *t*, la representacion del estado sera s<sup>t</sup>. La representacion
+Un agente en RL (reinforcement learning) proces una representacion interna del entorno. Para el momento *t*, la representacion del estado sera *s<sub>t</sub>*. Escoger una buena representacion del estado *s<sub>t</sub>* puede ser una tarea muy dificil, y una buena representacion puede simplificar mucho la tarea de aprendizaje. Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla. Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados. Esto quiere decir que hay 4,531,985,219,092 posibles configuraciones del tablero.
+
+### Acciones
+
+
 
 El agente recibe un estado, utiliza una estrategia (policy) para escoger una decision.
 Su accion modifica el entorno, que devuelve un nuevo estado y una recompensa.
