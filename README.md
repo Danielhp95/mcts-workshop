@@ -11,7 +11,7 @@ Acciones, set de acciones (en cuatro en raya tienes 6)
 
 ### Estados
 
-Un agente en RL (reinforcement learning) proces una representacion interna del entorno. Cada
+Un agente en RL (reinforcement learning) proces una representacion interna del entorno. Para el momento *t*, la representacion del estado sera s<sup>t</sup>. La representacion
 
 El agente recibe un estado, utiliza una estrategia (policy) para escoger una decision.
 Su accion modifica el entorno, que devuelve un nuevo estado y una recompensa.
