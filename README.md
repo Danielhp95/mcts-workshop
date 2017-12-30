@@ -5,22 +5,39 @@
 
 ![alt text](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram.png "Diagrama Reinforcement Learning")
 
-Hablar de:
-Estados, set de estados S (El juego de 4 en raya tiene 4,531,985,219,092 combinaciones posibles).
-Acciones, set de acciones (en cuatro en raya tienes 6)
+El 4 en raya es episodico. Merece mencion?
+
+## Loop de Reinforcement Learning.
+
+Por cada momento *t*:
+* El Agente:
+  1. Recibe recompensa *r<sub>t</sub>*
+  2. Recibe observacion *s<sub>t</sub>*
+  3. Ejecuta accion *a<sub>t</sub>*
+ * El Entorno:
+  1. Recibe accion *a<sub>t</sub>*
+  2. Emite recompensa *r<sub>t+1</sub>*
+  3. Emite observacion *s<sub>t+1</sub>*
+
 
 ### Estados
 
-Un agente en RL (reinforcement learning) proces una representacion interna del entorno. Para el momento *t*, la representacion del estado sera *s<sub>t</sub>*. Escoger una buena representacion del estado *s<sub>t</sub>* puede ser una tarea muy dificil, y una buena representacion puede simplificar mucho la tarea de aprendizaje. Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla. Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados. Esto quiere decir que hay 4,531,985,219,092 posibles configuraciones del tablero.
+Un agente en RL (reinforcement learning) procesa una representacion interna del entorno. Para cada instante *t*, la representacion del estado sera *s<sub>t</sub>*. Escoger una buena representacion del estado *s<sub>t</sub>* puede ser una tarea muy dificil, y una buena representacion puede simplificar mucho la tarea de aprendizaje. Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla. Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados. Esto quiere decir que hay 4,531,985,219,092 posibles configuraciones del tablero.
 
 ### Acciones
 
-
+En el instante *t* el agente "observa" el estado *s<sub>t</sub>*. Tras "observar" el estado *s<sub>t</sub>*, el agente debe tomar una accion
 
 El agente recibe un estado, utiliza una estrategia (policy) para escoger una decision.
 Su accion modifica el entorno, que devuelve un nuevo estado y una recompensa.
 La estrategia es un mapeado (asignacion) de estados a acciones.
-El objetivo de los problemas de RL se basan en encontrar una estrategia optima para el problema en cuestion. Donde optimo se considera que  se consige la mayor recompensa posible.
+El objetivo de los problemas de RL se basan en encontrar una estrategia optima para el problema en cuestion. Donde optimo se considera que se consige la mayor recompensa posible.
+
+![alt text](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram.png "Diagrama Reinforcement Learning")
+
+### Recompensa
+
+Reinforcement learning se basa en encontrar una policy que devuelva la mayor recompensa acumulada. En el caso del 4 en raya, el objetivo del agente es ganar la partida. Siguiendo un orden logico: un movimiento que gane la partida otorgara al agente una recompensa de +1, un movimiento que no termine la partida otorgara una recompensa de 0, un movimiento que pierda la partida penalizara al agente con una recompensa de -1. Realmente esto importa?
 
 ## Monte Carlo Tree Search (MCTS)
 
