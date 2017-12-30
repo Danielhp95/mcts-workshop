@@ -14,7 +14,7 @@ Por cada momento *t*:
   1. Recibe recompensa *r<sub>t</sub>*
   2. Recibe observacion *s<sub>t</sub>*
   3. Ejecuta accion *a<sub>t</sub>*
- * El Entorno:
+* El Entorno:
   1. Recibe accion *a<sub>t</sub>*
   2. Emite recompensa *r<sub>t+1</sub>*
   3. Emite observacion *s<sub>t+1</sub>*
@@ -22,7 +22,7 @@ Por cada momento *t*:
 
 ### Estados
 
-Un agente en RL (reinforcement learning) procesa una representacion interna del entorno. Para cada instante *t*, la representacion del estado sera *s<sub>t</sub>*. Escoger una buena representacion del estado *s<sub>t</sub>* puede ser una tarea muy dificil, y una buena representacion puede simplificar mucho la tarea de aprendizaje. Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla. Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados. Esto quiere decir que hay 4,531,985,219,092 posibles configuraciones del tablero.
+Un agente en RL (reinforcement learning) procesa una representacion interna del entorno. Para cada instante *t*, *s<sub>t</sub>* es la representacion del estado del entorno. Escoger una buena representacion del estado *s<sub>t</sub>* puede ser una tarea muy dificil, y una buena representacion puede simplificar mucho la tarea de aprendizaje. Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla. Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados. Esto quiere decir que hay 4,531,985,219,092 posibles configuraciones del tablero.
 
 ### Acciones
 
