@@ -255,12 +255,12 @@ def UCTPlayGame():
     """ Play a sample game between two UCT players where each player gets a different number
         of UCT iterations (= simulations = tree nodes).
     """
-    state = Connect4State(width=7, height=6)
+    state = Connect4State(width=30, height=30)
     while (state.GetMoves() != []):  # while not terminal state
         print(str(state))
         if state.playerJustMoved == 1:
-            # m = UCT(rootstate=state, itermax=10000, verbose=False)  # play with values for itermax and verbose = True
-            m = human_input(state)
+            m = UCT(rootstate=state, itermax=10000, verbose=False)  # play with values for itermax and verbose = True
+            #m = human_input(state)
         else:
             m = UCT(rootstate=state, itermax=10002, verbose=False)  # play with values for itermax and verbose = True
         print("Best Move: " + str(m) + "\n")
