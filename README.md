@@ -69,7 +69,7 @@ Formula de UCB1: ![ucb1](https://latex.codecogs.com/gif.latex?%5Cfrac%7Bw_i%7D%7
 
 + *w<sub>i</sub>* stands for the number of wins for the node considered after the i-th move    
 + *n<sub>i</sub* stands for the number of simulations for the node considered after the i-th move    
-+ *N<sub>i</sub* stands for the total number of simulations after the i-th move    
++ *N<sub>i</sub>* stands for the total number of simulations after the i-th move    
 + *c* is the exploration parameter—theoretically equal to √2; in practice usually chosen empirically    
   
 El nodo que reciba el valor UCB1 mas alto sera seleccionado. Este proceso de seleccion se repetira hasta que se encuentre un nodo que no este completamente expandido (que tenga nodos hijo que nunca hayan sido seleccionados) o al llegar un nodo hoja / terminal.
