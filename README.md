@@ -65,7 +65,7 @@ END
 
 #### Seleccion
 
-Formula de UCB1: ![ucb1](https://latex.codecogs.com/gif.latex?%5Cfrac%7Bw_i%7D%7Bn_i%7D%20&plus;%20c%20%5Csqrt%7B%5Cfrac%7B%5Cln%20N_i%7D%7Bn_i%7D%7D.gif)
+Formula de UCB1: ![ucb1](https://latex.codecogs.com/gif.latex?%5Cfrac%7Bw_i%7D%7Bn_i%7D%20&plus;%20c%20%5Csqrt%7B%5Cfrac%7B%5Cln%20N_i%7D%7Bn_i%7D%7D)
 
 + *w<sub>i</sub>* stands for the number of wins for the node considered after the i-th move
 + *n<sub>i</sub* stands for the number of simulations for the node considered after the i-th move
