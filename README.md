@@ -55,28 +55,37 @@ Para ser mas concretos, nos interesa aprender la accion optima que tomar en cada
 ### Estructura del algoritmo MCTS-UCT
 El algoritmo de MCTS-UCT se divide en 4 fases, seleccion, expansion, simulacion y retropropagacion (backpropagation).
 
-Repetir durante *ITERMAX* iteraciones:
-    * **Seleccion**: empezar desde la raíz R y seleccionar nodos hijos sucesivos hasta alcanzar un nodo hoja L. Esto permite que el árbol de juego se expanda hacia movimientos más prometedores, que es la esencia del algoritmo MCTS-UDT. 
-    * **Expansion**: a menos que L termine el juego con una victoria/pérdida para cualquiera de los jugadores, ya sea al crear uno o más nodos hijos o elegir entre ellos un nodo C.
-    * **Simulacion**: jugar una partida aleatoria empezando desde el nodo C hasta llegar a un nodo terminal / hoja.
-    * **Retropropagacion**: utilizar el resultado de la reproducción para actualizar la información en los nodos en el camino de C a R.
-**Seleccion de accion** escoger que accion tomar basado en las estadisticas calculadas durante las simulaciones.
+Repetir durante *ITERMAX* iteraciones:     
+    * **Seleccion**: empezar desde la raíz R y seleccionar nodos hijos sucesivos hasta alcanzar un nodo hoja L. Esto permite que el árbol de juego se expanda hacia movimientos más prometedores, que es la esencia del algoritmo MCTS-UDT.     
+    * **Expansion**: a menos que L termine el juego con una victoria/pérdida para cualquiera de los jugadores, ya sea al crear uno o más nodos hijos o elegir entre ellos un nodo C.    
+    * **Simulacion**: jugar una partida aleatoria empezando desde el nodo C hasta llegar a un nodo terminal / hoja.    
+    * **Retropropagacion**: utilizar el resultado de la reproducción para actualizar la información en los nodos en el camino de C a R.    
+**Seleccion de accion** escoger que accion tomar basado en las estadisticas calculadas durante las simulaciones.    
 END
 
 #### Seleccion
 
 Formula de UCB1: ![ucb1](https://latex.codecogs.com/gif.latex?%5Cfrac%7Bw_i%7D%7Bn_i%7D%20&plus;%20c%20%5Csqrt%7B%5Cfrac%7B%5Cln%20N_i%7D%7Bn_i%7D%7D)
 
++ *w<sub>i</sub>* stands for the number of wins for the node considered after the i-th move    
++ *n<sub>i</sub* stands for the number of simulations for the node considered after the i-th move    
++ *N<sub>i</sub* stands for the total number of simulations after the i-th move    
++ *c* is the exploration parameter—theoretically equal to √2; in practice usually chosen empirically    
+  
+El nodo que reciba el valor UCB1 mas alto sera seleccionado. Este proceso de seleccion se repetira hasta que se encuentre un nodo que no este completamente expandido (que tenga nodos hijo que nunca hayan sido seleccionados) o al llegar un nodo hoja / terminal.
+
+#### Expansion
+
+El paso mas sencillo, una vez se ha seleccionado un nuevo nodo para anhadirlo en el game tree, este se creara con contadores para varias estadisticas. Para MCTS-UDT nos interesa guardar:
+
 + *w<sub>i</sub>* stands for the number of wins for the node considered after the i-th move
 + *n<sub>i</sub* stands for the number of simulations for the node considered after the i-th move
-+ *N<sub>i</sub* stands for the total number of simulations after the i-th move
-+ *c* is the exploration parameter—theoretically equal to √2; in practice usually chosen empirically
 
+#### Simulacion
 
+#### Retropropagacion
 
 En nuestro caso, el 4 en raya, el agente debera colocar un ficha en una de las columnas que no esten llenas. 
-
-
   
 
 ### Propiedades de metodos Monte Carlo
