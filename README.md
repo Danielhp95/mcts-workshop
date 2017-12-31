@@ -41,13 +41,42 @@ El objetivo de los problemas de RL se basan en encontrar una estrategia optima p
 
 Reinforcement learning se basa en encontrar una policy que devuelva la mayor recompensa acumulada. En el caso del 4 en raya, el objetivo del agente es ganar la partida. Siguiendo un orden logico: un movimiento que gane la partida otorgara al agente una recompensa de +1, un movimiento que no termine la partida otorgara una recompensa de 0, un movimiento que pierda la partida penalizara al agente con una recompensa de -1. Realmente esto importa?
 
-## Monte Carlo Tree Search (MCTS)
+# Monte Carlo Tree Search (MCTS)
 
 MCTS es un metodo de Monte Carlo. Los elementos de Monte Carlo se basan en la siguiente idea: es posible ejecutar muchas simulaciones de algun proceso. Hay algo en este proceso que nos interesa aprender. En IA para videjuegos, esto suele ser la estrategia (*policy* en ingles) optima. Con lo tanto, si hacemos muchas simulaciones (*rollouts* en ingles), y al mismo tiempo guardamos alguna estadistica (como cuantas veces hemos tomado una accion, cuantas victorias hemos acumulado tras hacer una accion a lo largo de todas las simulaciones). Para poner un ejemplo concreto, si un agente se encuentra en
 
 Para ser mas concretos, nos interesa aprender la accion optima que tomar en cada estado del juego. Este concepto se encapsula en la funcion $Q(s,a)$
 
+## Monte Carlo Tree Search - Upper Confidence Bound applied to Trees (MCTS-UCT)
+
 ![mcts diagram](https://github.com/Danielhp95/mcts-workshop/blob/master/images/UCT-diagram.png "Diagrama MCTS-UCT")
+
+
+### Estructura del algoritmo MCTS-UCT
+El algoritmo de MCTS-UCT se divide en 4 fases, seleccion, expansion, simulacion y retropropagacion (backpropagation).
+
+Repetir durante *ITERMAX* iteraciones:
+    * **Seleccion**: empezar desde la raíz R y seleccionar nodos hijos sucesivos hasta alcanzar un nodo hoja L. Esto permite que el árbol de juego se expanda hacia movimientos más prometedores, que es la esencia del algoritmo MCTS-UDT. 
+    * **Expansion**: a menos que L termine el juego con una victoria/pérdida para cualquiera de los jugadores, ya sea al crear uno o más nodos hijos o elegir entre ellos un nodo C.
+    * **Simulacion**: jugar una partida aleatoria empezando desde el nodo C hasta llegar a un nodo terminal / hoja.
+    * **Retropropagacion**: utilizar el resultado de la reproducción para actualizar la información en los nodos en el camino de C a R.
+**Seleccion de accion** escoger que accion tomar basado en las estadisticas calculadas durante las simulaciones.
+END
+
+#### Seleccion
+
+Formula de UCB1: ![ucb1](https://latex.codecogs.com/gif.latex?%5Cfrac%7Bw_i%7D%7Bn_i%7D%20&plus;%20c%20%5Csqrt%7B%5Cfrac%7B%5Cln%20N_i%7D%7Bn_i%7D%7D.gif)
+
++ *w<sub>i</sub>* stands for the number of wins for the node considered after the i-th move
++ *n<sub>i</sub* stands for the number of simulations for the node considered after the i-th move
++ *N<sub>i</sub* stands for the total number of simulations after the i-th move
++ *c* is the exploration parameter—theoretically equal to √2; in practice usually chosen empirically
+
+
+
+En nuestro caso, el 4 en raya, el agente debera colocar un ficha en una de las columnas que no esten llenas. 
+
+
   
 
 ### Propiedades de metodos Monte Carlo
@@ -63,3 +92,20 @@ Para ser mas concretos, nos interesa aprender la accion optima que tomar en cada
 ## El reto
 
 Usar MCTS-UCT para calcular para cada turno una accion de entre [1,2,3,4,5,6].
+
+
+## TODO
+
+### Introduction
+* Polish everything
+* Add mathematical equations
+* Give more workshop specific comments
+
+### MCTS
+* Talk about game trees
+* Selection policy
+    * UCB1
+    * Explotation vs Exploration.
+* Expansion
+* Simulation
+* Back propagation
