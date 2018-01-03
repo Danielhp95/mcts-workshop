@@ -28,12 +28,9 @@ Para este taller, la representacion sera una matriz de 2 dimensiones, que repres
 
 ### Acciones
 
-Set de posibles acciones de un agente (A). En el instante *t* el agente "observa" el estado *s<sub>t</sub>*. Tras "observar" el estado *s<sub>t</sub>*, el agente escoge que accion *a<sub>t</sub>* va a llevar a cabo usando una **estrategia** ![policy](https://latex.codecogs.com/gif.latex?a_t%20%5Cpi%28a_t%20%7C%20s_t%29 pi). Una estrategia es un mapeado de estados a acciones. Asumiendo una estrategia (pi) deterministica), dado un estado *s<sub>t</sub>*, (pi(s_t)) asigna una accion *a<sub>t</sub>*. (a_t = pi(s_t)). La accion *a<sub>t</sub>* se lleva a cabo en el entorno. Un vez el entorno se haya modificado, este devolvera un estado *s<sub>t+1</sub>* junto con una recompensa *r<sub>t+1</sub>*.
+Set de posibles acciones de un agente (A). En el instante *t* el agente "observa" el estado *s<sub>t</sub>*. Tras "observar" el estado *s<sub>t</sub>*, el agente escoge que accion *a<sub>t</sub>* va a ejecutar usando una **estrategia** ![policy](https://latex.codecogs.com/gif.latex?a_t%20%5Cpi%28a_t%20%7C%20s_t%29). Una estrategia es un mapeado de estados a acciones. Asumiendo una estrategia (pi) deterministica), dado un estado *s<sub>t</sub>*, (pi(s_t)) asigna una accion *a<sub>t</sub>*. (a_t = pi(s_t)). La accion *a<sub>t</sub>* se lleva a cabo en el entorno. Un vez el entorno se haya modificado, este devolvera un estado *s<sub>t+1</sub>* junto con una recompensa *r<sub>t+1</sub>*.
 
-
-
-La estrategia es un mapeado (asignacion) de estados a acciones.
-El objetivo de los problemas de RL se basan en encontrar una estrategia optima para el problema en cuestion. Donde optimo se considera que se consige la mayor recompensa posible.
+El objetivo de los problemas de RL se basan en encontrar una estrategia optima para el problema en cuestion. Donde *optimo* se considera que se consige la mayor recompensa posible.
 
 ![rl loop](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram.png "Diagrama Reinforcement Learning")
 
@@ -51,6 +48,10 @@ Para ser mas concretos, nos interesa aprender la accion optima que tomar en cada
 
 ![mcts diagram](https://github.com/Danielhp95/mcts-workshop/blob/master/images/UCT-diagram.png "Diagrama MCTS-UCT")
 
+### Game Trees
+
+Un game tree es un arbol donde los nodos son estados *s<sub>0</sub>*,*s<sub>1</sub>*,*s<sub>2</sub>*...*s<sub>T</sub>* y los enlaces corresponden a acciones permitidas en ese estado *a<sub>1</sub>*,*a<sub>2</sub>*,*a<sub>3</sub>*...*a<sub>n</sub>*. El nodo raiz no tiene por que corresponder al estado inicial del juego (en el caso del 4 en raya, un tablero vacio).
+
 
 ### Estructura del algoritmo MCTS-UCT
 El algoritmo de MCTS-UCT se divide en 4 fases, seleccion, expansion, simulacion y retropropagacion (backpropagation).
@@ -67,26 +68,31 @@ END
 
 Formula de UCB1: ![ucb1](https://latex.codecogs.com/gif.latex?%5Cfrac%7Bw_i%7D%7Bn_i%7D%20&plus;%20c%20%5Csqrt%7B%5Cfrac%7B%5Cln%20N_i%7D%7Bn_i%7D%7D)
 
-+ *w<sub>i</sub>* stands for the number of wins for the node considered after the i-th move    
-+ *n<sub>i</sub* stands for the number of simulations for the node considered after the i-th move    
-+ *N<sub>i</sub* stands for the total number of simulations after the i-th move    
-+ *c* is the exploration parameter—theoretically equal to √2; in practice usually chosen empirically    
++ *w<sub>i</sub>*: numero de victorias acumuladas en el nodo hijo *i*.
++ *n<sub>i</sub*: numero de simulaciones acumuladas en el nodo hijo *i*.
++ *N<sub>i</sub*: numero de simulaciones acumuladas en el nodo actualmente escogido.
++ *c* parametro de exploracion, es una constante. Nos permite escoger entre los dos terminos de la equacion de UCB1. Un *c* grande da mas importancia a la exploracion. Un *c* pequenho (*c < 1*) da mas importancia a la explotacion. Ver (link de exploracion vs explotacion)
   
-El nodo que reciba el valor UCB1 mas alto sera seleccionado. Este proceso de seleccion se repetira hasta que se encuentre un nodo que no este completamente expandido (que tenga nodos hijo que nunca hayan sido seleccionados) o al llegar un nodo hoja / terminal.
+El nodo hijo *i* que reciba el valor UCB1 mas alto sera seleccionado. Esta fase de seleccion se repetira hasta que se seleccione un nodo que no este completamente expandido (que tenga nodos hijo que nunca hayan sido seleccionados) o al llegar un nodo hoja / terminal.
 
 #### Expansion
 
-El paso mas sencillo, una vez se ha seleccionado un nuevo nodo para anhadirlo en el game tree, este se creara con contadores para varias estadisticas. Para MCTS-UDT nos interesa guardar:
+El paso mas sencillo. Una vez se ha seleccionado un nuevo nodo para anhadirlo en el game tree, este se iniciara con contadores para diferentes estadisticas que serviran para guiar la fase de *seleccion* en futuras iteraciones. Viendo la equacion de UCB1 las estadisticas que nos interesa guardar son:
 
-+ *w<sub>i</sub>* stands for the number of wins for the node considered after the i-th move
-+ *n<sub>i</sub* stands for the number of simulations for the node considered after the i-th move
++ *w<sub>i</sub>*: numero de victorias acumuladas en el nodo hijo *i*.
++ *n<sub>i</sub*: numero de simulaciones acumuladas en el nodo hijo *i*.
 
 #### Simulacion
 
+En terminos generales, una simulacion es una sucesion de acciones por partes de todos los agentes que cambian el entorno hasta llegar a un estado terminal. En un game tree, una simulacion empieza en un nodo raiz y se toman acciones posibles que llevan a otros nodos. La simulacion termina cuando se llega a un nodo hoja / terminal. Terminada la iniciacion del nodo escogido por la equacion UCB1 (u otra estrategia de seleccion de nodo) comenzamos una simulacion del juego (en este taller 4 en raya) desde este nodo. Cada una de las acciones escogidas durante toda la simulacion son aleatorias (se juegan movimientos aleatorios). Se pueden utilizar acciones no aleatorias para obtener mejores resultados, pero esto no es necesario para el 4 en raya. Otros terminos utilizados para hablar de simulaciones en la literaturas son *rollout* o *playout*. (mejorar wording)
+
+**Nota**: Todos los nodos por los que se pasa en cada simulacion *NO* forman parte del game tree que se esta formando durante MCTS-UCT. (anhadir mas clarificacion?)
+
+
 #### Retropropagacion
 
-En nuestro caso, el 4 en raya, el agente debera colocar un ficha en una de las columnas que no esten llenas. 
-  
+Todas las estadisticas de los nodos escogidos durante la fase de *seleccion* son actualizadas con el resultado de la simulacion. En otras palabras, el resultado de la simulacion se propaga empezando por el ultimo nodo escogido en la fase de *seleccion* y terminando en el nodo raiz del game tree. Para *actualizar* las estadisticas basta con actualizar el numero de simulaciones y victorias (en caso de que la simulacion haya sido victoriosa) en cada uno de los nodos. Este proceso tambien se conoce como *backpropagation*.
+
 
 ### Propiedades de metodos Monte Carlo
 
@@ -111,10 +117,8 @@ Usar MCTS-UCT para calcular para cada turno una accion de entre [1,2,3,4,5,6].
 * Give more workshop specific comments
 
 ### MCTS
-* Talk about game trees
-* Selection policy
-    * UCB1
-    * Explotation vs Exploration.
-* Expansion
-* Simulation
-* Back propagation
+    * Explotation vs Exploration link
+* Readout strategy? 
+
+### El reto
+* Escribir un enunciado para el reto. Dar una pauta de guia para donde empezar y decir que se me pueden hacer preguntas. El internet es tu amigo.
