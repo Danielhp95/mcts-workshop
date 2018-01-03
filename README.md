@@ -3,7 +3,7 @@
 
 ## Reinforcement learning
 
-![alt text](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram.png "Diagrama Reinforcement Learning")
+![rl loop](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram.png "Diagrama Reinforcement Learning")
 
 Reinforcement Learning es una rama de inteligencia artificial basada en el concepto de "prueba y error". Un algoritmo generico de Reinforcement Learning presenta un **agente** que actua en un **entorno** y recibe **recompensa** positiva o negativa a traves de sus **acciones**. 
 
@@ -32,7 +32,7 @@ Set de posibles acciones de un agente (A). En el instante *t* el agente "observa
 
 El objetivo de los problemas de RL se basan en encontrar una estrategia optima para el problema en cuestion. Donde *optimo* se considera que se consige la mayor recompensa posible.
 
-![rl loop](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram.png "Diagrama Reinforcement Learning")
+![rl loop 2](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram2.png "Diagrama Reinforcement Learning")
 
 ### Recompensa
 
@@ -60,7 +60,7 @@ Repetir durante *ITERMAX* iteraciones:
     * **Seleccion**: empezar desde la raíz R y seleccionar nodos hijos sucesivos hasta alcanzar un nodo hoja L. Esto permite que el árbol de juego se expanda hacia movimientos más prometedores, que es la esencia del algoritmo MCTS-UDT.     
     * **Expansion**: a menos que L termine el juego con una victoria/pérdida para cualquiera de los jugadores, ya sea al crear uno o más nodos hijos o elegir entre ellos un nodo C.    
     * **Simulacion**: jugar una partida aleatoria empezando desde el nodo C hasta llegar a un nodo terminal / hoja.    
-    * **Retropropagacion**: utilizar el resultado de la reproducción para actualizar la información en los nodos en el camino de C a R.    
+    * **Retropropagacion**: utilizar el resultado de la simulacion para actualizar la información en los nodos en el camino de C a R.    
 **Seleccion de accion** escoger que accion tomar basado en las estadisticas calculadas durante las simulaciones.    
 END
 
@@ -72,7 +72,7 @@ Formula de UCB1: ![ucb1](https://latex.codecogs.com/gif.latex?%5Cfrac%7Bw_i%7D%7
 + *n<sub>i</sub*: numero de simulaciones acumuladas en el nodo hijo *i*.
 + *N<sub>i</sub*: numero de simulaciones acumuladas en el nodo actualmente escogido.
 + *c* parametro de exploracion, es una constante. Nos permite escoger entre los dos terminos de la equacion de UCB1. Un *c* grande da mas importancia a la exploracion. Un *c* pequenho (*c < 1*) da mas importancia a la explotacion. Ver (link de exploracion vs explotacion)
-  
+
 El nodo hijo *i* que reciba el valor UCB1 mas alto sera seleccionado. Esta fase de seleccion se repetira hasta que se seleccione un nodo que no este completamente expandido (que tenga nodos hijo que nunca hayan sido seleccionados) o al llegar un nodo hoja / terminal.
 
 #### Expansion
@@ -104,9 +104,17 @@ Todas las estadisticas de los nodos escogidos durante la fase de *seleccion* son
 **Juego deterministico:** Cada movimiento tiene un resultado unico. Es decir, cada movimiento solo tiene una posible resultado. Si esto no fuera asi, el juego seria estocastico.    
 **Nodo terminal:** Un nodo que no tiene ningun movimiento posible (porque, por ejemplo, uno de los jugadores ha ganado).
 
-## El reto
+## El ejercicio.
 
 Usar MCTS-UCT para calcular para cada turno una accion de entre [1,2,3,4,5,6].
+
+### Instalacion
+
+Necesitaras Python 2.7 para este ejercicio. El script solo tiene una dependencia: `colorama`, un modulo para imprimir texto con colores en la terminal, su uso en este ejercicio es puramente estetico. La implementacion del algoritmo no requiere ninguna herramienta que no venga dentro de la distribucion estandard de Python 2.7. Para instalar `colorama`:
+
+```python
+pip install colorama
+```
 
 
 ## TODO
@@ -122,3 +130,7 @@ Usar MCTS-UCT para calcular para cada turno una accion de entre [1,2,3,4,5,6].
 
 ### El reto
 * Escribir un enunciado para el reto. Dar una pauta de guia para donde empezar y decir que se me pueden hacer preguntas. El internet es tu amigo.
+
+## Ejercicio
+
+Explicar como correr una partida contra otro jugador. Como jugar contra la maquina. como instalar la dependencia
