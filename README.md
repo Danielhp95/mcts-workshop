@@ -61,7 +61,7 @@ Repetir durante *ITERMAX* iteraciones:
     * **Expansion**: a menos que L termine el juego con una victoria/pérdida para cualquiera de los jugadores, ya sea al crear uno o más nodos hijos o elegir entre ellos un nodo C.    
     * **Simulacion**: jugar una partida aleatoria empezando desde el nodo C hasta llegar a un nodo terminal / hoja.    
     * **Retropropagacion**: utilizar el resultado de la simulacion para actualizar la información en los nodos en el camino de C a R.    
-**Seleccion de accion** escoger que accion tomar basado en las estadisticas calculadas durante las simulaciones.    
+**Seleccion de accion** escoger que accion tomar basado en las estadisticas calculadas durante las previas iteraciones.    
 END
 
 #### Seleccion
@@ -69,8 +69,8 @@ END
 Formula de UCB1: ![ucb1](https://latex.codecogs.com/gif.latex?%5Cfrac%7Bw_i%7D%7Bn_i%7D%20&plus;%20c%20%5Csqrt%7B%5Cfrac%7B%5Cln%20N_i%7D%7Bn_i%7D%7D)
 
 + *w<sub>i</sub>*: numero de victorias acumuladas en el nodo hijo *i*.
-+ *n<sub>i</sub*: numero de simulaciones acumuladas en el nodo hijo *i*.
-+ *N<sub>i</sub*: numero de simulaciones acumuladas en el nodo actualmente escogido.
++ *n<sub>i</sub>*: numero de simulaciones acumuladas en el nodo hijo *i*.
++ *N<sub>i</sub>*: numero de simulaciones acumuladas en el nodo actualmente escogido.
 + *c* parametro de exploracion, es una constante. Nos permite escoger entre los dos terminos de la equacion de UCB1. Un *c* grande da mas importancia a la exploracion. Un *c* pequenho (*c < 1*) da mas importancia a la explotacion. Ver (link de exploracion vs explotacion)
 
 El nodo hijo *i* que reciba el valor UCB1 mas alto sera seleccionado. Esta fase de seleccion se repetira hasta que se seleccione un nodo que no este completamente expandido (que tenga nodos hijo que nunca hayan sido seleccionados) o al llegar un nodo hoja / terminal.
@@ -80,7 +80,7 @@ El nodo hijo *i* que reciba el valor UCB1 mas alto sera seleccionado. Esta fase 
 El paso mas sencillo. Una vez se ha seleccionado un nuevo nodo para anhadirlo en el game tree, este se iniciara con contadores para diferentes estadisticas que serviran para guiar la fase de *seleccion* en futuras iteraciones. Viendo la equacion de UCB1 las estadisticas que nos interesa guardar son:
 
 + *w<sub>i</sub>*: numero de victorias acumuladas en el nodo hijo *i*.
-+ *n<sub>i</sub*: numero de simulaciones acumuladas en el nodo hijo *i*.
++ *n<sub>i</sub>*: numero de simulaciones acumuladas en el nodo hijo *i*.
 
 #### Simulacion
 
@@ -92,6 +92,14 @@ En terminos generales, una simulacion es una sucesion de acciones por partes de 
 #### Retropropagacion
 
 Todas las estadisticas de los nodos escogidos durante la fase de *seleccion* son actualizadas con el resultado de la simulacion. En otras palabras, el resultado de la simulacion se propaga empezando por el ultimo nodo escogido en la fase de *seleccion* y terminando en el nodo raiz del game tree. Para *actualizar* las estadisticas basta con actualizar el numero de simulaciones y victorias (en caso de que la simulacion haya sido victoriosa) en cada uno de los nodos. Este proceso tambien se conoce como *backpropagation*.
+
+### Seleccion de accion.
+
+El uso de las estadisticas calculadas durante las previas fases es la de seleccionar una accion *a<sub>t</sub>* para tomar en el movimiento numero *t*. Donde *s<sub>t</sub>* es el estado correspondiente al nodo raiz del game tree generado por MCTS-UCT. Hay varias posbilidades para escoger que accion tomar una vez tenemos un game tree suficientemente grande. Nosotros utilizaremos una idea sencillla. Inspeccionamos a todos los nodos hijo correspondientes al nodo raiz y tomamos el que tiene un valor mayor de posibilidad de victoria. Tomamos la accion asignada al nodo hijo *c* cuyas estadisticas maximizen la equacion: 
+
+
++ *w<sub>c</sub>*: numero de victorias acumuladas en el nodo hijo *c*.
++ *n<sub>c</sub>*: numero de simulaciones acumuladas en el nodo hijo *c*.
 
 
 ### Propiedades de metodos Monte Carlo
