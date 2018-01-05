@@ -4,7 +4,7 @@
 
 ![rl loop](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram.png "Diagrama Reinforcement Learning")
 
-Reinforcement Learning es una rama de inteligencia artificial basada en el concepto de "prueba y error". Un algoritmo generico de Reinforcement Learning presenta un **agente** que actua en un **entorno** y recibe **recompensa** positiva o negativa a traves de sus **acciones**. 
+Reinforcement Learning es una rama de inteligencia artificial basada en el concepto de "prueba y error". Un algoritmo generico de Reinforcement Learning presenta un **agente** que actua en un **entorno** y recibe **recompensa** positiva o negativa a traves de sus **acciones**. El objetivo de un **agente** es encontrar una **estrategia** que maximize su **recompensa** a largo plazo.
 
 ### Loop de Reinforcement Learning.
 
