@@ -1,4 +1,3 @@
-
 # Introduccion
 
 ## Reinforcement learning
@@ -7,7 +6,7 @@
 
 Reinforcement Learning es una rama de inteligencia artificial basada en el concepto de "prueba y error". Un algoritmo generico de Reinforcement Learning presenta un **agente** que actua en un **entorno** y recibe **recompensa** positiva o negativa a traves de sus **acciones**. 
 
-## Loop de Reinforcement Learning.
+### Loop de Reinforcement Learning.
 
 Por cada escalon de tiempo *t*:
 * El Agente:
@@ -38,19 +37,21 @@ El objetivo de los problemas de RL se basan en encontrar una estrategia optima p
 
 Reinforcement learning se basa en encontrar una policy que devuelva la mayor recompensa acumulada. En el caso del 4 en raya, el objetivo del agente es ganar la partida. Siguiendo un orden logico: un movimiento que gane la partida otorgara al agente una recompensa de +1, un movimiento que no termine la partida otorgara una recompensa de 0, un movimiento que pierda la partida penalizara al agente con una recompensa de -1. Realmente esto importa?
 
-# Monte Carlo Tree Search (MCTS)
+# Taller: Dia 1.
 
-MCTS es un metodo de Monte Carlo. Los elementos de Monte Carlo se basan en la siguiente idea: es posible ejecutar muchas simulaciones de algun proceso. Hay algo en este proceso que nos interesa aprender. En IA para videjuegos, esto suele ser la estrategia (*policy* en ingles) optima. Con lo tanto, si hacemos muchas simulaciones (*rollouts* en ingles), y al mismo tiempo guardamos alguna estadistica (como cuantas veces hemos tomado una accion, cuantas victorias hemos acumulado tras hacer una accion a lo largo de todas las simulaciones). Para poner un ejemplo concreto, si un agente se encuentra en
+## Game Trees
 
-Para ser mas concretos, nos interesa aprender la accion optima que tomar en cada estado del juego. Este concepto se encapsula en la funcion $Q(s,a)$
+Un game tree es un arbol donde los nodos son estados *s<sub>0</sub>*,*s<sub>1</sub>*,*s<sub>2</sub>*...*s<sub>T</sub>* y los enlaces corresponden a acciones permitidas en ese estado *a<sub>1</sub>*,*a<sub>2</sub>*,*a<sub>3</sub>*...*a<sub>n</sub>*. El nodo raiz no tiene por que corresponder al estado inicial del juego (en el caso del 4 en raya, un tablero vacio). MEJORAR
+
+## Monte Carlo Tree Search (MCTS)
+
+MCTS es un metodo de Monte Carlo. Los metodos de Monte Carlo se basan en la siguiente idea: hay un fenomeno que queremos estudiar y tenemos acceso a un modelo de este fenomeno. Utilizando el modelo podemos generar muchas simulaciones de este fenomeno. Con estas simulaciones podemos calcular estadisticas  peprtinentes del fenomeno que queremos estudiar. En el campo de inteligencia artificial para videojuegos, el modelo son las regls del juego. El fenomeno a investigar es la estrategia optima para el juego en cuestion. 
+
+Siendo mas concretos, utilizamos MCTS para responder a la siguiente pregunta. Dado un estado *s<sub>t</sub>* (signo de pregunta) que accion *a<sub>t</sub>* nos dara una mayor probabilidad de ganar la partida?
 
 ## Monte Carlo Tree Search - Upper Confidence Bound applied to Trees (MCTS-UCT)
 
 ![mcts diagram](https://github.com/Danielhp95/mcts-workshop/blob/master/images/UCT-diagram.png "Diagrama MCTS-UCT")
-
-### Game Trees
-
-Un game tree es un arbol donde los nodos son estados *s<sub>0</sub>*,*s<sub>1</sub>*,*s<sub>2</sub>*...*s<sub>T</sub>* y los enlaces corresponden a acciones permitidas en ese estado *a<sub>1</sub>*,*a<sub>2</sub>*,*a<sub>3</sub>*...*a<sub>n</sub>*. El nodo raiz no tiene por que corresponder al estado inicial del juego (en el caso del 4 en raya, un tablero vacio).
 
 
 ### Estructura del algoritmo MCTS-UCT
@@ -88,7 +89,6 @@ En terminos generales, una simulacion es una sucesion de acciones por partes de 
 
 **Nota**: Todos los nodos por los que se pasa en cada simulacion *NO* forman parte del game tree que se esta formando durante MCTS-UCT. (anhadir mas clarificacion?)
 
-
 #### Retropropagacion
 
 Todas las estadisticas de los nodos escogidos durante la fase de *seleccion* son actualizadas con el resultado de la simulacion. En otras palabras, el resultado de la simulacion se propaga empezando por el ultimo nodo escogido en la fase de *seleccion* y terminando en el nodo raiz del game tree. Para *actualizar* las estadisticas basta con actualizar el numero de simulaciones y victorias (en caso de que la simulacion haya sido victoriosa) en cada uno de los nodos. Este proceso tambien se conoce como *backpropagation*.
@@ -112,9 +112,9 @@ El uso de las estadisticas calculadas durante las previas fases es la de selecci
 **Juego deterministico:** Cada movimiento tiene un resultado unico. Es decir, cada movimiento solo tiene una posible resultado. Si esto no fuera asi, el juego seria estocastico.    
 **Nodo terminal:** Un nodo que no tiene ningun movimiento posible (porque, por ejemplo, uno de los jugadores ha ganado).
 
-## El ejercicio.
+## El Reto
 
-Usar MCTS-UCT para calcular para cada turno una accion de entre [1,2,3,4,5,6].
+Programar una implementacion del algoritmo MCTS-UCT descrito arriba para el juego del 4 en raya.
 
 ### Instalacion
 
@@ -123,6 +123,31 @@ Necesitaras Python 2.7 para este ejercicio. El script solo tiene una dependencia
 ```python
 pip install colorama
 ```
+
+## El script
+
+El script `MCTS.py` contiene todo el codigo necesario para los dos talleres. Tambien es el unico archivo que debera ser modificado durante los talleres. Su contenido esta escrito en ingles para facilitar busquedas relacionadas en internet. Los comentarios estan en espanhol.
+
+```python
+class GameState
+```
+Interfaz minima y necesaria para crear un estado de juego que sea compatible con el algoritmo MCTS-UCT. Sirve para entender la implementacion de la clase `class Connect4State` y como referencia para el ejercicio del dia 2.    
+
+```python
+class Connect4State
+```
+
+
+```python
+class Node
+```
+
+
+```python
+def PlayGame
+```
+
+
 
 
 ## TODO
@@ -134,11 +159,10 @@ pip install colorama
 
 ### MCTS
     * Explotation vs Exploration link
-* Readout strategy? 
 
 ### El reto
-* Escribir un enunciado para el reto. Dar una pauta de guia para donde empezar y decir que se me pueden hacer preguntas. El internet es tu amigo.
+* Dar una pauta de guia para donde empezar y decir que se me pueden hacer preguntas. El internet es tu amigo.
 
 ## Ejercicio
 
-Explicar como correr una partida contra otro jugador. Como jugar contra la maquina. como instalar la dependencia
+Explicar como correr una partida contra otro jugador. Como jugar contra la maquina.
