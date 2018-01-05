@@ -69,10 +69,10 @@ END
 
 Formula de UCB1: ![ucb1](https://latex.codecogs.com/gif.latex?%5Cfrac%7Bw_i%7D%7Bn_i%7D%20&plus;%20c%20%5Csqrt%7B%5Cfrac%7B%5Cln%20N_i%7D%7Bn_i%7D%7D)
 
-+ *w<sub>i</sub>*: numero de victorias acumuladas en el nodo hijo *i*.
-+ *n<sub>i</sub>*: numero de simulaciones acumuladas en el nodo hijo *i*.
-+ *N<sub>i</sub>*: numero de simulaciones acumuladas en el nodo actualmente escogido.
-+ *c* parametro de exploracion, es una constante. Nos permite escoger entre los dos terminos de la equacion de UCB1. Un *c* grande da mas importancia a la exploracion. Un *c* pequenho (*c < 1*) da mas importancia a la explotacion. Ver (link de exploracion vs explotacion)
++ **w<sub>i</sub>**: numero de victorias acumuladas en el nodo hijo *i*.
++ **n<sub>i</sub>**: numero de simulaciones acumuladas en el nodo hijo *i*.
++ **N<sub>i</sub>**: numero de simulaciones acumuladas en el nodo actualmente escogido.
++ **c**: parametro de exploracion, es una constante. Nos permite escoger entre los dos terminos de la equacion de UCB1. Un *c* grande da mas importancia a la exploracion. Un **c** pequenho (**c < 1**) da mas importancia a la explotacion. Ver (ingles) [explation-vs-exploration](https://medium.com/@dennybritz/exploration-vs-exploitation-f46af4cf62fe explotation vs exploration)
 
 El nodo hijo *i* que reciba el valor UCB1 mas alto sera seleccionado. Esta fase de seleccion se repetira hasta que se seleccione un nodo que no este completamente expandido (que tenga nodos hijo que nunca hayan sido seleccionados) o al llegar un nodo hoja / terminal.
 
