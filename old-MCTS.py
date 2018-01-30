@@ -1,11 +1,22 @@
-# Este script contiene una implementacion simple del algoritmo UCT Monte Carlo Tree Search (MCTS UTC) en Python 2.7
-# La funcion estrella UCT(rootstate, itermax, verbose = False) se encuentra cerca del fondo del codigo.
-# La eficiencia de este algoritmo se ha reducido para aumentar la claridad de su implementacion.
+# This is a very simple implementation of the UCT Monte Carlo Tree Search algorithm in Python 2.7.
+# The function UCT(rootstate, itermax, verbose = False) is towards the bottom of the code.
+# It aims to have the clearest and simplest possible code, and for the sake of clarity, the code
+# is orders of magnitude less efficient than it could be made, particularly by using a
+# state.GetRandomMove() or state.DoRandomRollout() function.
+#
+# Example GameState classes for Nim, OXO and Connect4 are included to give some idea of how you
+# can write your own GameState use UCT in your 2-player game. Change the game to be played in
+# the UCTPlayGame() function at the bottom of the code.
+#
+# Written by Peter Cowling, Ed Powley, Daniel Whitehouse (University of York, UK) September 2012 - 2017.
+#
+# Licence is granted to freely use and distribute for any sensible/legal purpose so long as this comment
+# remains in any distributed code.
+#
+# For more information about Monte Carlo Tree Search check out our web site at www.mcts.ai
 
-# Escrito por Peter Cowling, Ed Powley, Daniel Whitehouse and Daniel Hernandez (University of York, UK) September 2012 - 2017.
-
-from __future__ import division  # Para que el operador de division '/' tenga la misma funcionalidad que Python3.
-from math import *  # Necesario para la equacion de UCB1. Usaremos math.sqrt y math.log
+from __future__ import division
+from math import *
 import random
 
 import colorama
@@ -13,68 +24,64 @@ from colorama import Fore
 
 
 class GameState:
-    """
-        Un GameState representa una configuracion valida del 'estado' de un juego.
-        Por ejemplo, las posiciones de todas las piezas activas en una partida de ajedrez.
-        Las funciones presentadas en esta clase son las minimas necesarias
-        para la implementacion del algoritmo UCT para cualquier juego de 2-jugadores,
-        de informacion completa, deterministico y zero-sum.
-        (mas informacion sobre estos terminos en https://github.com/Danielhp95/mcts-workshop)
-
+    """ A state of the game, i.e. the game board. These are the only functions which are
+        absolutely necessary to implement UCT in any 2-player complete information deterministic
+        zero-sum game, although they can be enhanced and made quicker, for example by using a
+        GetRandomMove() function to generate a random move during rollout.
+        By convention the players are numbered 1 and 2.
     """
 
     def __init__(self):
-        self.playerJustMoved = 2  # Al empezar el juego se considera que el jugador 2 ha hecho un movimiento. Que es equivalente a decir que el jugador 1 empieza.
+        self.playerJustMoved = 2  # At the root pretend the player just moved is player 2 - player 1 has the first move
 
     def Clone(self):
-        """ Crea una copia profunda del estado del juego.
+        """ Create a deep clone of this game state.
         """
         st = GameState()
         st.playerJustMoved = self.playerJustMoved
         return st
 
     def DoMove(self, move):
-        """ Transforma el GameState al llevar a cabo el movimiento 'move'.
-            Es importante que se actualize playerJustMoved.
+        """ Update a state by carrying out the given move.
+            Must update playerJustMoved.
         """
         self.playerJustMoved = 3 - self.playerJustMoved
 
     def GetMoves(self):
-        """ Devuelve una array con todos los posibles movimientos
-        """
-
-    def GetResult(self, playerjm):
-        """ Devuelve el ganador de la partida desde el punto de vista de playerjm.
-        """
-
-    def __repr__(self):
-        """ Funcion 'built in' de python. devuelve una string del objecto (como obj.toString() en Java)
+        """ Get all possible moves from this state.
         """
         pass
 
+    def GetResult(self, playerjm):
+        """ Get the game result from the viewpoint of playerjm.
+        """
+        pass
+
+    def __repr__(self):
+        """ Don't need this - but good style.
+        """
+        pass
 
 class Connect4State:
-    """
-        GameState para el juego de 4 en Raya (Connect4 en ingles).
-        El tablero (board) es una array 2D (filas y columnas).
-        Para cada entrada de la array: 0 = vacio, 1 = jugador 1 (X), 2 = jugador 2 (O)
-        En el juego de 4 en Raya los jugadores se turnan para dejar caer piezas
-        en una de las 7 columnas, cada columna puede contener 6 piezas. El jugador que consigue
-        crear una fila, columna o diagonal con 4 piezas, gana.
+    """ A state of the game of Connect4, i.e. the game board.
+        The board is a 2D array where 0 = empty (.), 1 = player 1 (X), 2 = player 2 (O).
+        In connect4 players alternately drop pieces down one of the 7 columns
+        of a board with 6 rows - aiming that the piece dropped creates a row, column or
+        diagonal of 4 pieces.
     """
 
     def __init__(self, width=7, height=6):
-        self.playerJustMoved = 2  # Al empezar el juego se considera que el jugador 2 ha hecho un movimiento. Que es equivalente a decir que el jugador 1 empieza.
-        self.board = []  # 0 = vacio, 1 = jugador 1 (X), 2 = jugador 2 (O)
-        self.winner = 0 # 0 = ningun ganador, 1 = jugador 1 ha ganado, 2 = jugador 2 ha ganado.
+        self.playerJustMoved = 2  # At the root pretend the player just moved is p2 - p1 has the first move
+        self.board = []  # 0 = empty, 1 = player 1, 2 = player 2
+        self.winner = 0 # No winner yet
 
         self.width = width
         self.height = height
         for y in range(self.width):
-            self.board.append([0] * self.height) # Genera una fila de 0s. Generando un tablero vacio
+            self.board.append([0] * self.height) # six zeroes in each column
 
     def Clone(self):
-        """ Crea una copia profunda del este GameState
+        """ Create a deep clone of this game state.
         """
         st = Connect4State(width=self.width, height=self.height)
         st.playerJustMoved = self.playerJustMoved
@@ -83,31 +90,31 @@ class Connect4State:
         return st
 
     def DoMove(self, movecol):
-        """ Transforma el GameState al llevar a cabo el movimiento 'movecol'.
-            Es importante que se actualize playerJustMoved.
+        """ Update a state by carrying out the given move.
+            Must update playerToMove.
         """
 
         assert movecol >= 0 and movecol <= self.width and self.board[movecol][self.height - 1] == 0
         row = self.height - 1
         while row >= 0 and self.board[movecol][row] == 0:
-            row -= 1 # encuentra la primera fila ocupada (o 0 si no hay ninguna ficha en la columna)
+            row -= 1 # find the first occupied row (or 0 for the bottom of the board
 
-        row += 1 # el primer espacio libre en la columna
+        row += 1 # the first empty space in movecol
 
-        self.playerJustMoved = 3 - self.playerJustMoved # siguiente jugador
-        self.board[movecol][row] = self.playerJustMoved # coloca la ficha en la celda correcta
+        self.playerJustMoved = 3 - self.playerJustMoved # new player
+        self.board[movecol][row] = self.playerJustMoved # drop the counter
         if self.DoesMoveWin(movecol, row):
-            self.winner = self.playerJustMoved # apunta el ganador de la partida
+            self.winner = self.playerJustMoved # record the win
 
     def GetMoves(self):
-        """ Devuelve una array con todos los movimientos posibles - todas las columnas que tienen un espacio libre.
+        """ Get all possible moves from this state - i.e. all columns with at least one empty space.
         """
         if self.winner != 0:
-            return [] # ningun movimiento posible dado que hay un ganador (in DoMove())
-        return [col for col in range(self.width) if self.board[col][self.height - 1] == 0] # lista de columnas con espacio libre
+            return [] # no moves since someone has already won (in DoMove())
+        return [col for col in range(self.width) if self.board[col][self.height - 1] == 0] # columns a list of columns with space
 
     def DoesMoveWin(self, x, y):
-        """ Comprueba si el movimiento en la posicion (x,y) genera una linea (columna, fila o diagonal) de longitud 4 (o mayor).
+        """ Does the move at (x,y) win by forming a row, column or diagonal of length at least 4?
         """
         me = self.board[x][y]
         for (dx, dy) in [(0, +1), (+1, +1), (+1, 0), (+1, -1)]:
@@ -130,7 +137,7 @@ class Connect4State:
         return x >= 0 and x < self.width and y >= 0 and y < self.height
 
     def GetResult(self, playerjm):
-        """ Devuelve el ganador de la partida desde el punto de vista de playerjm.
+        """ Get the game result from the viewpoint of playerjm.
         """
         return playerjm == self.winner
 
@@ -145,29 +152,30 @@ class Connect4State:
 
 
 class Node:
-    """ Un nodo del game treee. self.wins siempre esta desde el punto de vista de playerJustMoved. (aclarar)
-    """ 
+    """ A node in the game tree. self.wins is always from the viewpoint of playerJustMoved.
+        Crashes if state not specified.
+    """
 
     def __init__(self, move=None, parent=None, state=None):
-        self.move = move  # el move que se hizo en un state previo para llegar a este estado. "None" para el nodo raiz.
-        self.parentNode = parent  # "None" para el nodo raiz
+        self.move = move  # the move that got us to this node - "None" for the root node
+        self.parentNode = parent  # "None" for the root node
         self.childNodes = []
         self.wins = 0
         self.visits = 0
-        self.untriedMoves = state.GetMoves()  # Futuros nodos hijo
+        self.untriedMoves = state.GetMoves()  # future child nodes
         self.playerJustMoved = state.playerJustMoved  # the only part of the state that the Node needs later
 
     def UCTSelectChild(self):
-        """ Usa la formula de UCB1 para seleccionar uno de los nodos hijo: 
-                lambda child: child.wins/child.visits + const * sqrt(2*log(self.visits)/child.visits)
-            la constante se usa para escoger entre exploracion o explotacion.
+        """ Use the UCB1 formula to select a child node. Often a constant UCTK is applied so we have
+            lambda c: c.wins/c.visits + UCTK * sqrt(2*log(self.visits)/c.visits to vary the amount of
+            exploration versus exploitation.
         """
         s = sorted(self.childNodes, key=lambda c: c.wins / c.visits + sqrt(2 * log(self.visits) / c.visits))[-1]
         return s
 
     def AddChild(self, m, s):
-        """ Quita m de la array untriedMoves y anhade un nuevo nodo hijo para este movimiento
-            se devuelve el nodo hijo que se ha anhadido.
+        """ Remove m from untriedMoves and add a new child node for this move.
+            Return the added child node
         """
         n = Node(move=m, parent=self, state=s)
         self.untriedMoves.remove(m)
@@ -175,15 +183,11 @@ class Node:
         return n
 
     def Update(self, result):
-        """ Actualiza las estadisticas guardadas en este nodo. 
-            Anhade una visita al contador de visitas del nodo, anhade el resultado (win/lose) desde el punto de vista del playerJustMoved
-            One additional visit and result additional wins. Result must be from the viewpoint of playerJustmoved.
+        """ Update this node - one additional visit and result additional wins. Result must be from the viewpoint of playerJustmoved.
         """
         self.visits += 1
         self.wins += result
 
-    """ Funciones para debuggear y modo verbose
-    """
     def __repr__(self):
         return "[M:" + str(self.move) + " W/V:" + str(self.wins) + "/" + str(self.visits) + " U:" + str(
             self.untriedMoves) + "]"
@@ -219,7 +223,7 @@ def UCT(rootstate, itermax, verbose=False):
         state = rootstate.Clone()
 
         # Select
-        while node.untriedMoves == [] and node.childNodes != []:  # Mientras el nodo este completamente expandido y non sea terminal
+        while node.untriedMoves == [] and node.childNodes != []:  # node is fully expanded and non-terminal
             node = node.UCTSelectChild()
             state.DoMove(node.move)
 
@@ -248,21 +252,23 @@ def UCT(rootstate, itermax, verbose=False):
     else:
         print(rootnode.ChildrenToString())
 
-    return move
+    return move 
 
 
 def UCTPlayGame():
     """ Play a sample game between two UCT players where each player gets a different number
         of UCT iterations (= simulations = tree nodes).
     """
-    state = Connect4State(width=30, height=30)
+    # state = OXOState() # uncomment to play OXO
+    # state = NimState(5)  # uncomment to play Nim with the given number of starting chips
+    state = Connect4State(width=7, height=6)
     while (state.GetMoves() != []):  # while not terminal state
         print(str(state))
         if state.playerJustMoved == 1:
-            m = UCT(rootstate=state, itermax=10000, verbose=False)  # play with values for itermax and verbose = True
-            #m = human_input(state)
-        else:
+            # m = UCT(rootstate=state, itermax=10000, verbose=False)  # play with values for itermax and verbose = True
             m = UCT(rootstate=state, itermax=10002, verbose=False)  # play with values for itermax and verbose = True
+        else:
+            m = human_input(state)
         print("Best Move: " + str(m) + "\n")
         state.DoMove(m)
     if state.GetResult(state.playerJustMoved) == 1.0:
@@ -277,7 +283,7 @@ def UCTPlayGame():
 
 def human_input(state):
     valid_moves = state.GetMoves()
-    move = None
+    move = -1
     while move not in valid_moves:
         interface_moves = [move + 1 for move in valid_moves]
         move = int(raw_input("Possible moves are: " + str(interface_moves) + ' '))
