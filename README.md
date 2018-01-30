@@ -21,13 +21,17 @@ Por cada escalon de tiempo **t**:
 
 ### Estados
 
-Set de posibles estados de un entorno **S**. Un agente en RL (reinforcement learning) procesa una representacion interna del entorno. Para cada instante **t**, **s<sub>t</sub>** es la representacion del estado del entorno. Normalmente, escoger una buena representacion del estado **s<sub>t</sub>** no es facil, y una buena representacion puede simplificar mucho la tarea de aprendizaje.
+Set de posibles estados de un entorno **S**. Un agente en RL (reinforcement learning) procesa una representacion interna del entorno. **s<sub>t</sub>** es la representacion del entorno para cada instante **t**. Normalmente, escoger una buena representacion del estado **s<sub>t</sub>** no es facil, y una buena representacion puede simplificar mucho la tarea de aprendizaje.
 
-Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla. Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados. Esto quiere decir que hay 4,531,985,219,092 posibles configuraciones del tablero.
+Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla.  *Board<sub>ij</sub>* denotara el estado de la casilla en la fila *i* y columna *j*. *Board<sub>ij</sub>* = 0: casilla vacia. *Board<sub>ij</sub>* = 1: ficha del jugador 1. *Board<sub>ij</sub>* = 2: ficha del jugador 2.
+
+Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados.
 
 ### Acciones
 
 Set de posibles acciones de un agente **A**. En el instante **t** el agente "observa" el estado **s<sub>t</sub>**. Tras "observar" el estado **s<sub>t</sub>**, el agente escoge que accion **a<sub>t</sub>** va a ejecutar usando una **estrategia** ![policy](https://latex.codecogs.com/gif.latex?%5Cpi). Una estrategia es un mapeado de estados a acciones. Dado un estado **s<sub>t</sub>**, ![pi state_t](https://latex.codecogs.com/gif.latex?%5Cpi%28s_t%29) representa la accion **a<sub>t</sub>** que el agente ejecutaria siguiendo la estrategia ![policy](https://latex.codecogs.com/gif.latex?%5Cpi). La accion **a<sub>t</sub>** se lleva a cabo en el entorno, modificandolo. Un vez el entorno se haya modificado, este presentara un estado **s<sub>t+1</sub>** junto con una recompensa **r<sub>t+1</sub>** al agente. Una estrategia puede ser deterministica y mapear una unica accion para cada estado ![deterministic policy](https://latex.codecogs.com/gif.latex?a_t%20%3D%20%5Cpi%28%20s_t%29). Una estrategia tambien puede ser *estocastica* y mapear cada estado a una distribucion de acciones ![stochastic policy](https://latex.codecogs.com/gif.latex?a_t%20%5Csim%20%5Cpi%28s_t%29). Para este taller solo nos interesan estrategias deterministicas.
+
+Para este taller, un estado **s<sub>t</sub>** tendra un maximo de 7 acciones posibles, **A** =  [0, 1, 2, 3, 4, 5, 6]. Cada ![possible actions](https://latex.codecogs.com/gif.latex?a%20%5Cin%20%5B0%2C1%2C2%2C3%2C4%2C5%2C6%5D) representa la accion de colocar un ficha en una de las 7 columnas. En caso de que una columna este llena, no se podra colocar una ficha en ella.
 
 El objetivo de los problemas de RL se basan en encontrar una estrategia optima para el problema en cuestion. Donde *optimo* se considera que se consige la mayor recompensa posible.
 
@@ -93,7 +97,7 @@ En terminos generales, una simulacion es una sucesion de acciones por partes de 
 
 Todas las estadisticas de los nodos escogidos durante la fase de **seleccion** son actualizadas con el resultado de la simulacion. En otras palabras, el resultado de la simulacion se propaga empezando por el ultimo nodo escogido en la fase de **seleccion** y terminando en el nodo raiz del game tree. Para **actualizar** las estadisticas basta con actualizar el numero de simulaciones y victorias (en caso de que la simulacion haya sido victoriosa) en cada uno de los nodos. Este proceso tambien se conoce como **backpropagation**.
 
-### Seleccion de accion.
+#### Seleccion de accion.
 
 El uso de las estadisticas calculadas durante las previas fases es la de seleccionar una accion **a<sub>t</sub>** para tomar en el movimiento numero **t**. Donde **s<sub>t</sub>** es el estado correspondiente al nodo raiz del game tree generado por MCTS-UCT. Hay varias posbilidades para escoger que accion tomar una vez tenemos un game tree suficientemente grande. Nosotros utilizaremos una idea sencillla. Inspeccionamos a todos los nodos hijo correspondientes al nodo raiz y tomamos el que tiene un valor mayor de posibilidad de victoria. Tomamos la accion asignada al nodo hijo **c** cuyas estadisticas maximizen la equacion: 
 
@@ -151,7 +155,7 @@ def PlayGame
 
 
 ## TODO
-
+f
 ### Introduction
 * Polish everything
 * Add mathematical equations
