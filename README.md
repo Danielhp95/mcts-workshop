@@ -14,13 +14,13 @@ Por cada escalon de tiempo **t**:
   2. Recibe observacion **s<sub>t</sub>**
   3. Emite accion **a<sub>t</sub>**
 * El Entorno:
-  1. Recibe accion **a<sub>t</sub>** y la ejecute. La ejecucion de la accion **a<sub>t</sub>** modifica el entorno.
+  1. Recibe accion **a<sub>t</sub>** y la ejecuta. La ejecucion de la accion **a<sub>t</sub>** modifica el entorno.
   2. Emite recompensa **r<sub>t+1</sub>**
   3. Emite observacion **s<sub>t+1</sub>**
 
 ### El entorno
 
-## Estados
+#### Estados
 
 Set de posibles estados de un entorno **S**. Un agente en RL (reinforcement learning) procesa una representacion interna del entorno. **s<sub>t</sub>** es la representacion del entorno para cada instante **t**. Normalmente, escoger una buena representacion del estado **s<sub>t</sub>** no es facil, y una buena representacion puede simplificar mucho la tarea de aprendizaje.
 
@@ -28,7 +28,7 @@ Para este taller, la representacion sera una matriz de 2 dimensiones, que repres
 
 Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados.
 
-## Acciones
+#### Acciones
 
 Set de posibles acciones de un agente **A**. En el instante **t** el agente "observa" el estado **s<sub>t</sub>**. Para este taller, un estado **s<sub>t</sub>** tendra un maximo de 7 acciones posibles, **A** =  [0, 1, 2, 3, 4, 5, 6]. Cada ![possible actions](https://latex.codecogs.com/gif.latex?a%20%5Cin%20%5B0%2C1%2C2%2C3%2C4%2C5%2C6%5D) representa la accion de colocar un ficha en una de las 7 columnas. En caso de que una columna este llena, no se podra colocar una ficha en ella.
 
