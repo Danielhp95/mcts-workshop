@@ -24,14 +24,14 @@ Por cada escalon de tiempo **t**:
 
 El entorno para este taller es el juego del 4 en ralla. Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados.
 
-El set de posibles estados de un entorno se denomina **S**. Cada valor [!s_in_S](https://latex.codecogs.com/gif.latex?s%20%5Cin%20%5Ctextbf%7BS%7D) denota una posible representacion del estado de un entorno. **s<sub>t</sub>** es la representacion del entorno para cada instante **t**. Normalmente, escoger una buena representacion del estado **s<sub>t</sub>** no es facil, y una buena representacion puede simplificar mucho la tarea de aprendizaje.
+El set de posibles estados de un entorno se denomina **S**. Cada valor ![!s_in_S](https://latex.codecogs.com/gif.latex?s%20%5Cin%20%5Ctextbf%7BS%7D) denota una posible representacion del estado de un entorno. **s<sub>t</sub>** es la representacion del entorno para cada instante **t**. Normalmente, escoger una buena representacion del estado **s<sub>t</sub>** no es facil, y una buena representacion puede simplificar mucho la tarea de aprendizaje.
 
 Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla, nos referiremos al estado como *Board* (*tablero* en ingles). *Board<sub>ij</sub>* denotara el estado de la casilla en la fila *i* y columna *j*. *Board<sub>ij</sub>* = 0: casilla vacia. *Board<sub>ij</sub>* = 1: ficha del jugador 1. *Board<sub>ij</sub>* = 2: ficha del jugador 2.
 
 
 #### Acciones
 
-Set de posibles acciones de un agente **A**. En el instante **t** el agente "observa" el estado **s<sub>t</sub>**. Para este taller, un estado **s<sub>t</sub>** tendra un maximo de 7 acciones posibles, **A** =  [0, 1, 2, 3, 4, 5, 6]. Cada ![possible actions](https://latex.codecogs.com/gif.latex?a%20%5Cin%20%5B0%2C1%2C2%2C3%2C4%2C5%2C6%5D) representa la accion de colocar un ficha en una de las 7 columnas. En caso de que una columna este llena, no se podra colocar una ficha en ella.
+El set de posibles acciones disponibles en un entorno se denomina **A**. En el instante **t** el agente "observa" el estado **s<sub>t</sub>**. Para este taller, un estado **s<sub>t</sub>** tendra un maximo de 7 acciones posibles, **A** =  [0, 1, 2, 3, 4, 5, 6]. Cada ![possible actions](https://latex.codecogs.com/gif.latex?a%20%5Cin%20%5B0%2C1%2C2%2C3%2C4%2C5%2C6%5D) representa la accion de colocar un ficha en una de las 7 columnas. En caso de que una columna este llena, no se podra colocar una ficha en ella.
 
 El objetivo de los problemas de RL se basan en encontrar una estrategia optima para el problema en cuestion. Donde *optimo* se considera que se consige la mayor recompensa posible.
 
@@ -147,6 +147,10 @@ El script `MCTS.py` contiene todo el codigo necesario para los dos talleres. Tam
 class GameState
 ```
 Interfaz minima y necesaria para crear un estado de juego que sea compatible con el algoritmo MCTS-UCT. Sirve para entender la implementacion de la clase `class Connect4State` y como referencia para el ejercicio del dia 2.    
+
+
+
+
 
 ```python
 class Connect4State
