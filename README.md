@@ -31,9 +31,8 @@ Para este taller, la representacion sera una matriz de 2 dimensiones, que repres
 
 #### Acciones
 
-El set de posibles acciones disponibles en un entorno se denomina **A**. En el instante **t** el agente "observa" el estado **s<sub>t</sub>**. Para este taller, un estado **s<sub>t</sub>** tendra un maximo de 7 acciones posibles, **A** =  [0, 1, 2, 3, 4, 5, 6]. Cada ![possible actions](https://latex.codecogs.com/gif.latex?a%20%5Cin%20%5B0%2C1%2C2%2C3%2C4%2C5%2C6%5D) representa la accion de colocar un ficha en una de las 7 columnas. En caso de que una columna este llena, no se podra colocar una ficha en ella.
+El set de posibles acciones disponibles en un entorno se denomina **A**. Para este taller, un estado **s<sub>t</sub>** tendra un maximo de 7 acciones posibles, **A** =  [0, 1, 2, 3, 4, 5, 6]. Cada ![possible actions](https://latex.codecogs.com/gif.latex?a%20%5Cin%20%5B0%2C1%2C2%2C3%2C4%2C5%2C6%5D) representa la accion de colocar un ficha en una de las 7 columnas. En caso de que una columna este llena, no se podra colocar una ficha en ella.
 
-El objetivo de los problemas de RL se basan en encontrar una estrategia optima para el problema en cuestion. Donde *optimo* se considera que se consige la mayor recompensa posible.
 
 
 ### Recompensa
@@ -44,8 +43,10 @@ Reinforcement learning se basa en encontrar una policy que devuelva la mayor rec
 
 ## Estrategia
 
-Tras "observar" el estado **s<sub>t</sub>**, el agente escoge que accion **a<sub>t</sub>** va a ejecutar usando una **estrategia** ![policy](https://latex.codecogs.com/gif.latex?%5Cpi). Una estrategia es un mapeado de estados a acciones. Dado un estado **s<sub>t</sub>**, ![pi state_t](https://latex.codecogs.com/gif.latex?%5Cpi%28s_t%29) representa la accion **a<sub>t</sub>** que el agente ejecutaria siguiendo la estrategia ![policy](https://latex.codecogs.com/gif.latex?%5Cpi). La accion **a<sub>t</sub>** se lleva a cabo en el entorno, modificandolo. Un vez el entorno se haya modificado, este presentara un estado **s<sub>t+1</sub>** junto con una recompensa **r<sub>t+1</sub>** al agente. Una estrategia puede ser deterministica y mapear una unica accion para cada estado ![deterministic policy](https://latex.codecogs.com/gif.latex?a_t%20%3D%20%5Cpi%28%20s_t%29). Una estrategia tambien puede ser *estocastica* y mapear cada estado a una distribucion de acciones ![stochastic policy](https://latex.codecogs.com/gif.latex?a_t%20%5Csim%20%5Cpi%28s_t%29). Para este taller solo nos interesan estrategias deterministicas.
+Por cada instante **t** el agente "observa" el estado **s<sub>t</sub>**. Tras "observar" el estado **s<sub>t</sub>**, el agente escoge que accion **a<sub>t</sub>** va a ejecutar usando una **estrategia** ![policy](https://latex.codecogs.com/gif.latex?%5Cpi). Una estrategia es un mapeado de estados a acciones. Dado un estado **s<sub>t</sub>**, ![pi state_t](https://latex.codecogs.com/gif.latex?%5Cpi%28s_t%29) representa la accion **a<sub>t</sub>** que el agente ejecutaria siguiendo la estrategia ![policy](https://latex.codecogs.com/gif.latex?%5Cpi). La accion **a<sub>t</sub>** se lleva a cabo en el entorno, modificandolo. Un vez el entorno se haya modificado, este presentara un estado **s<sub>t+1</sub>** junto con una recompensa **r<sub>t+1</sub>** al agente. Una estrategia puede ser deterministica y mapear una unica accion para cada estado ![deterministic policy](https://latex.codecogs.com/gif.latex?a_t%20%3D%20%5Cpi%28%20s_t%29). Una estrategia tambien puede ser *estocastica* y mapear cada estado a una distribucion de acciones ![stochastic policy](https://latex.codecogs.com/gif.latex?a_t%20%5Csim%20%5Cpi%28s_t%29). Para este taller solo nos interesan estrategias deterministicas.
 
+
+El objetivo de los problemas de RL se basan en encontrar una estrategia optima para el problema en cuestion. Donde *optimo* se considera que se consige la mayor recompensa posible.
 
 La imagen de abajo ilustra una representacion mas matematica del agente y el entorno:
 
@@ -141,15 +142,12 @@ pip install colorama
 
 ## El script
 
-El script `MCTS.py` contiene todo el codigo necesario para los dos talleres. Tambien es el unico archivo que debera ser modificado durante los talleres. Su contenido esta escrito en ingles para facilitar busquedas relacionadas en internet. Los comentarios estan en espanhol.
+El script `MCTS.py` contiene todo el codigo necesario para los dos talleres. Tambien es el unico archivo que debera ser modificado durante los talleres. Su contenido esta escrito en ingles para facilitar busquedas relacionadas en internet. Los comentarios estan en espanhol. Utiliza los comentarios dentro del codigo como documentacion.
 
 ```python
 class GameState
 ```
-Interfaz minima y necesaria para crear un estado de juego que sea compatible con el algoritmo MCTS-UCT. Sirve para entender la implementacion de la clase `class Connect4State` y como referencia para el ejercicio del dia 2.    
-
-
-
+Interfaz minima y necesaria para crear un estado de juego que sea compatible con el algoritmo MCTS-UCT. Sirve para entender la implementacion de la clase `class Connect4State` y como referencia para el ejercicio del dia 2. 
 
 
 ```python
