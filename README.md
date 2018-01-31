@@ -22,11 +22,12 @@ Por cada escalon de tiempo **t**:
 
 #### Estados
 
-Set de posibles estados de un entorno **S**. Un agente en RL (reinforcement learning) procesa una representacion interna del entorno. **s<sub>t</sub>** es la representacion del entorno para cada instante **t**. Normalmente, escoger una buena representacion del estado **s<sub>t</sub>** no es facil, y una buena representacion puede simplificar mucho la tarea de aprendizaje.
+El entorno para este taller es el juego del 4 en ralla. Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados.
 
-Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla.  *Board<sub>ij</sub>* denotara el estado de la casilla en la fila *i* y columna *j*. *Board<sub>ij</sub>* = 0: casilla vacia. *Board<sub>ij</sub>* = 1: ficha del jugador 1. *Board<sub>ij</sub>* = 2: ficha del jugador 2.
+El set de posibles estados de un entorno se denomina **S**. Cada valor [!s_in_S](https://latex.codecogs.com/gif.latex?s%20%5Cin%20%5Ctextbf%7BS%7D) denota una posible representacion del estado de un entorno. **s<sub>t</sub>** es la representacion del entorno para cada instante **t**. Normalmente, escoger una buena representacion del estado **s<sub>t</sub>** no es facil, y una buena representacion puede simplificar mucho la tarea de aprendizaje.
 
-Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados.
+Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla, nos referiremos al estado como *Board* (*tablero* en ingles). *Board<sub>ij</sub>* denotara el estado de la casilla en la fila *i* y columna *j*. *Board<sub>ij</sub>* = 0: casilla vacia. *Board<sub>ij</sub>* = 1: ficha del jugador 1. *Board<sub>ij</sub>* = 2: ficha del jugador 2.
+
 
 #### Acciones
 
