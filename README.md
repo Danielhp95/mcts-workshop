@@ -28,12 +28,9 @@ El set de posibles estados de un entorno se denomina **S**. Cada valor ![!s_in_S
 
 Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla, nos referiremos al estado como *Board* (*tablero* en ingles). *Board<sub>ij</sub>* denotara el estado de la casilla en la fila *i* y columna *j*. *Board<sub>ij</sub>* = 0: casilla vacia. *Board<sub>ij</sub>* = 1: ficha del jugador 1. *Board<sub>ij</sub>* = 2: ficha del jugador 2.
 
-
 #### Acciones
 
-El set de posibles acciones disponibles en un entorno se denomina **A**. Para este taller, un estado **s<sub>t</sub>** tendra un maximo de 7 acciones posibles, **A** =  [0, 1, 2, 3, 4, 5, 6]. Cada ![possible actions](https://latex.codecogs.com/gif.latex?a%20%5Cin%20%5B0%2C1%2C2%2C3%2C4%2C5%2C6%5D) representa la accion de colocar un ficha en una de las 7 columnas. En caso de que una columna este llena, no se podra colocar una ficha en ella.
-
-
+El set de posibles acciones disponibles en un entorno se denomina **A**. Para este taller, un estado **s<sub>t</sub>** tendra un maximo de 7 acciones posibles, **A** =  [0, 1, 2, 3, 4, 5, 6]. Cada ![possible actions](https://latex.codecogs.com/gif.latex?a%20%5Cin%20%5B0%2C1%2C2%2C3%2C4%2C5%2C6%5D) representa la accion de colocar un ficha en una de las 7 columnas. En caso de que en un estado **s<sub>t</sub>** la columna **i** este llena, no se podra colocar una ficha en ella, con lo cual la accion **a<sub>i</sub>** no estara disponible en el estado **s<sub>t</sub>**.
 
 ### Recompensa
 
