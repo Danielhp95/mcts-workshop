@@ -36,6 +36,8 @@ class GameState:
     def DoMove(self, move):
         """ Transforma el GameState al llevar a cabo el movimiento 'move'.
             Es importante que se actualize playerJustMoved.
+
+            @input move: (int) accion tomada por el agente
         """
         self.playerJustMoved = 3 - self.playerJustMoved
 
@@ -43,8 +45,10 @@ class GameState:
         """ Devuelve una array con todos los posibles movimientos
         """
 
-    def GetResult(self, playerjm):
-        """ Devuelve el ganador de la partida desde el punto de vista de playerjm.
+    def GetResult(self, playerJustMoved):
+        """ Devuelve el ganador de la partida desde el punto de vista de playerJustMoved.
+
+            @input playerJustMoved: (int) numero del jugador que acaba de tomar una accion.
         """
 
     def __repr__(self):
@@ -85,6 +89,8 @@ class Connect4State:
     def DoMove(self, movecol):
         """ Transforma el GameState al llevar a cabo el movimiento 'movecol'.
             Es importante que se actualize playerJustMoved.
+
+            @input movecol: (int) columna sobre la que se va a soltar la pieza.
         """
 
         assert movecol >= 0 and movecol <= self.width and self.board[movecol][self.height - 1] == 0
@@ -108,6 +114,10 @@ class Connect4State:
 
     def DoesMoveWin(self, x, y):
         """ Comprueba si el movimiento en la posicion (x,y) genera una linea (columna, fila o diagonal) de longitud 4 (o mayor).
+            No hace falta entender esta funcion.
+
+            @input x: index de la columna
+            @input y: index de la fila
         """
         me = self.board[x][y]
         for (dx, dy) in [(0, +1), (+1, +1), (+1, 0), (+1, -1)]:
@@ -129,10 +139,12 @@ class Connect4State:
     def IsOnBoard(self, x, y):
         return x >= 0 and x < self.width and y >= 0 and y < self.height
 
-    def GetResult(self, playerjm):
-        """ Devuelve el ganador de la partida desde el punto de vista de playerjm.
+    def GetResult(self, playerJustMoved):
+        """ Devuelve el ganador de la partida desde el punto de vista de playerJustMoved.
+
+            @input playerJustMoved: (int) numero del jugador que acaba de tomar una accion.
         """
-        return playerjm == self.winner
+        return playerJustMoved == self.winner
 
     def __repr__(self):
         s = ""
@@ -169,19 +181,24 @@ class Node:
         s = sorted(self.childNodes, key=lambda c: c.wins / c.visits + sqrt(2 * log(self.visits) / c.visits))[-1]
         return s
 
-    def AddChild(self, m, s):
-        """ Quita m de la array untriedMoves y anhade un nuevo nodo hijo para este movimiento
+    def AddChild(self, move, state):
+        """ Quita move de la array untriedMoves y anhade un nuevo nodo hijo para este movimiento
             se devuelve el nodo hijo que se ha anhadido.
+
+            @input move: (int) accion tomada por el agente
+            @input state: (GameState) estado correspondiente al nuevo nodo hijo (childNode)
         """
-        n = Node(move=m, parent=self, state=s)
-        self.untriedMoves.remove(m)
-        self.childNodes.append(n)
+        node = Node(move=move, parent=self, state=state)
+        self.untriedMoves.remove(move)
+        self.childNodes.append(node)
         return n
 
     def Update(self, result):
         """ Actualiza las estadisticas guardadas en este nodo.
             Anhade una visita al contador de visitas del nodo, anhade el resultado (win/lose) desde el punto de vista del playerJustMoved
             One additional visit and result additional wins. Result must be from the viewpoint of playerJustmoved.
+
+            @input result: (int) 1 denota victoria, 0 para el resto de los casos.
         """
         self.visits += 1
         self.wins += result
@@ -214,7 +231,10 @@ class Node:
 def UCT(rootstate, itermax, verbose=False):
     """ Conduct a UCT search for itermax iterations starting from rootstate.
         Return the best move from the rootstate.
-        Assumes 2 alternating players (player 1 starts), with game results in the range [0.0, 1.0]."""
+        Assumes 2 alternating players (player 1 starts), with game results in the range [0.0, 1.0].
+
+        @input itermax: (int) numero de simulaciones (partidas) que se van a ejecutar antes de decidir que accion tomar.
+    """
 
     rootnode = Node(state=rootstate)
 
