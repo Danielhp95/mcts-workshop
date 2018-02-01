@@ -30,7 +30,7 @@ Para este taller, la representacion sera una matriz de 2 dimensiones, que repres
 
 #### Acciones
 
-El set de posibles acciones disponibles en un entorno se denomina **A**. Para este taller, un estado **s<sub>t</sub>** tendra un maximo de 7 acciones posibles, **A** =  [0, 1, 2, 3, 4, 5, 6]. Cada ![possible actions](https://latex.codecogs.com/gif.latex?a%20%5Cin%20%5B0%2C1%2C2%2C3%2C4%2C5%2C6%5D) representa la accion de colocar un ficha en una de las 7 columnas. En caso de que en un estado **s<sub>t</sub>** la columna **i** este llena, no se podra colocar una ficha en ella, con lo cual la accion **a<sub>i</sub>** no estara disponible en el estado **s<sub>t</sub>**.
+El set de posibles acciones disponibles en un entorno se denomina **A**. Para este taller, un estado **s<sub>t</sub>** tendra un maximo de 7 acciones posibles, **A** =  [0, 1, 2, 3, 4, 5, 6]. Cada ![possible actions](https://latex.codecogs.com/gif.latex?a%20%5Cin%20%5B0%2C1%2C2%2C3%2C4%2C5%2C6%5D) representa la accion de colocar un ficha en una de las 7 columnas del tablero. En caso de que en un estado **s<sub>t</sub>** la columna numero **i** este llena, no se podra colocar una ficha en ella, con lo cual la accion **a<sub>i</sub>** no estara disponible en el estado **s<sub>t</sub>**.
 
 ### Recompensa
 
@@ -47,7 +47,6 @@ El objetivo de un agente se basan en encontrar una estrategia ![policy](https://
 
 La imagen de abajo ilustra una representacion mas matematica del agente y el entorno:
 
-
 ![rl loop 2](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram2.png "Diagrama Reinforcement Learning")
 
 # Taller: Dia 1.
@@ -58,7 +57,7 @@ Un game tree es un arbol donde los nodos son estados **s<sub>0</sub>**,**s<sub>1
 
 ## Monte Carlo Tree Search (MCTS)
 
-MCTS es un metodo de Monte Carlo. Los metodos de Monte Carlo se basan en la siguiente idea: hay un fenomeno que queremos estudiar y tenemos acceso a un modelo de este fenomeno. Utilizando el modelo podemos generar muchas simulaciones de este fenomeno. Con estas simulaciones podemos calcular estadisticas  peprtinentes del fenomeno que queremos estudiar. En el campo de inteligencia artificial para videojuegos, el modelo son las regls del juego. El fenomeno a investigar es la estrategia optima para el juego en cuestion. 
+MCTS es un metodo de Monte Carlo. Los metodos de Monte Carlo se basan en la siguiente idea: hay un fenomeno que queremos estudiar y tenemos acceso a un modelo (un simulador) de este fenomeno. Utilizando el modelo podemos generar muchas simulaciones de este fenomeno. Con estas simulaciones podemos calcular estadisticas  pertinentes del fenomeno que queremos estudiar. En el campo de inteligencia artificial para videojuegos, el modelo son las regls del juego. El fenomeno a investigar es la estrategia optima para el juego en cuestion. 
 
 Siendo mas concretos, utilizamos MCTS para responder a la siguiente pregunta. Dado un estado **s<sub>t</sub>** (signo de pregunta) que accion **a<sub>t</sub>** nos dara una mayor probabilidad de ganar la partida?
 
@@ -114,10 +113,9 @@ El uso de las estadisticas calculadas durante las previas fases es la de selecci
 + **w<sub>c</sub>**: numero de victorias acumuladas en el nodo hijo **c**.
 + **n<sub>c</sub>**: numero de simulaciones acumuladas en el nodo hijo **c**.
 
+### Animacion de MCTS
 
-### Propiedades de metodos Monte Carlo
-
-**Seccion de opcional lectura, pero atender este taller tambien es opcional, con lo que ya que estamos...**
+![mcts animation](https://github.com/Danielhp95/taller-mcts-coruna/blob/master/images/gif/gif.gif)
 
 
 ## Terminologia
