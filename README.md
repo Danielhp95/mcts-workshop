@@ -57,7 +57,7 @@ Un game tree es un arbol donde los nodos son estados **s<sub>0</sub>**,**s<sub>1
 
 ## Monte Carlo Tree Search (MCTS)
 
-MCTS es un metodo de Monte Carlo. Los metodos de Monte Carlo se basan en la siguiente idea: hay un fenomeno que queremos estudiar y tenemos acceso a un modelo (un simulador) de este fenomeno. Utilizando el modelo podemos generar muchas simulaciones de este fenomeno. Con estas simulaciones podemos calcular estadisticas  pertinentes del fenomeno que queremos estudiar. En el campo de inteligencia artificial para videojuegos, el modelo son las regls del juego. El fenomeno a investigar es la estrategia optima para el juego en cuestion. 
+MCTS es un metodo de Monte Carlo. Los metodos de Monte Carlo se basan en la siguiente idea: hay un fenomeno que queremos estudiar y tenemos acceso a un modelo (un simulador) de este fenomeno. Utilizando el modelo podemos generar muchas simulaciones de este fenomeno. Con estas simulaciones podemos calcular estadisticas  pertinentes del fenomeno que queremos estudiar. En el campo de inteligencia artificial para videojuegos, el modelo son las regls del juego. Dado un estado **s<sub>t</sub>** en un entorno, el fenomeno a averiguar es el valor de ejecutar cada accion en **s<sub>t</sub>**.
 
 Siendo mas concretos, utilizamos MCTS para responder a la siguiente pregunta. Dado un estado **s<sub>t</sub>** (signo de pregunta) que accion **a<sub>t</sub>** nos dara una mayor probabilidad de ganar la partida?
 
@@ -65,15 +65,16 @@ Siendo mas concretos, utilizamos MCTS para responder a la siguiente pregunta. Da
 
 ![mcts diagram](https://github.com/Danielhp95/mcts-workshop/blob/master/images/UCT-diagram.png "Diagrama MCTS-UCT")
 
+La idea de MCTS es la proxima. Para averiguar que accion tomar en **s<sub>t</sub>**, simulamos muchisimas partidas, con cada partida aprendemos estadisticas que nos informan sobre lo buena (o mala) que es una accion ejecutada en el estado **s<sub>t</sub>**. Con estas estadisticas, guiamos la exploracion. La exploracion guia que acciones vamos a investigar y que acciones vamos a dejar atras porque no son buenas.
 
 ### Estructura del algoritmo MCTS-UCT
-El algoritmo de MCTS-UCT se divide en 4 fases, seleccion, expansion, simulacion y retropropagacion (backpropagation).
+El algoritmo de MCTS-UCT se divide en 4 fases, seleccion, expansion, simulacion y retropropagacion (backpropagation). El unico parametro que MCTS-UCT necesita es la cantidad de iteraciones que se le permite ejecutar antes de decidir que accion tomar. Llamaremos a este parametro **ITERMAX**.
 
 Repetir durante **ITERMAX** iteraciones:     
-    * **Seleccion**: empezar desde la raíz R y seleccionar nodos hijos sucesivos hasta alcanzar un nodo hoja L. Esto permite que el árbol de juego se expanda hacia movimientos más prometedores, que es la esencia del algoritmo MCTS-UDT.     
-    * **Expansion**: a menos que L termine el juego con una victoria/pérdida para cualquiera de los jugadores, ya sea al crear uno o más nodos hijos o elegir entre ellos un nodo C.    
-    * **Simulacion**: jugar una partida aleatoria empezando desde el nodo C hasta llegar a un nodo terminal / hoja.    
-    * **Retropropagacion**: utilizar el resultado de la simulacion para actualizar la información en los nodos en el camino de C a R.    
+    * **Seleccion**: empezar desde el nodo raíz R y seleccionar nodos hijos sucesivos hasta alcanzar un nodo hoja L. Esto permite que el árbol de juego se expanda hacia movimientos más prometedores, que es la esencia del algoritmo MCTS-UCT.     
+    * **Expansion**: iniciar las estadisicas para el nuevo nodo L.
+    * **Simulacion**: jugar una partida aleatoria (cada movimiento simulado es una accion valida aleatoria) empezando desde el nodo L hasta llegar a un nodo terminal / hoja.
+    * **Retropropagacion**: utilizar el resultado de la simulacion para actualizar la información en los nodos en el camino de L a R.    
 **Seleccion de accion** escoger que accion tomar basado en las estadisticas calculadas durante las previas iteraciones.    
 END
 
@@ -163,7 +164,6 @@ def PlayGame
 
 
 ## TODO
-f
 ### Introduction
 * Polish everything
 * Add mathematical equations
