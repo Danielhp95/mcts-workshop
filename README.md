@@ -65,17 +65,19 @@ Siendo mas concretos, utilizamos MCTS para responder a la siguiente pregunta. Da
 
 ![mcts diagram](https://github.com/Danielhp95/mcts-workshop/blob/master/images/UCT-diagram.png "Diagrama MCTS-UCT")
 
-La idea de MCTS es la proxima. Para averiguar que accion tomar en **s<sub>t</sub>**, simulamos muchisimas partidas, con cada partida aprendemos estadisticas que nos informan sobre lo buena (o mala) que es una accion ejecutada en el estado **s<sub>t</sub>**. Con estas estadisticas, guiamos la exploracion. La exploracion guia que acciones vamos a investigar y que acciones vamos a dejar atras porque no son buenas.
+La idea de MCTS es la proxima. Para averiguar que accion tomar en **s<sub>t</sub>**, simulamos muchisimas partidas, con cada partida aprendemos estadisticas que nos informan sobre lo buena (o mala) que es una accion ejecutada en el estado **s<sub>t</sub>**. Con estas estadisticas, guiamos la exploracion. La exploracion guia que acciones vamos a investigar y que acciones vamos a dejar atras porque no son suficientemente buenas.
 
 ### Estructura del algoritmo MCTS-UCT
 El algoritmo de MCTS-UCT se divide en 4 fases, seleccion, expansion, simulacion y retropropagacion (backpropagation). El unico parametro que MCTS-UCT necesita es la cantidad de iteraciones que se le permite ejecutar antes de decidir que accion tomar. Llamaremos a este parametro **ITERMAX**.
 
-Repetir durante **ITERMAX** iteraciones:     
-    * **Seleccion**: empezar desde el nodo raíz R y seleccionar nodos hijos sucesivos hasta alcanzar un nodo hoja L. Esto permite que el árbol de juego se expanda hacia movimientos más prometedores, que es la esencia del algoritmo MCTS-UCT.     
+MCTS-UCT(estado inicial = **s<sub>t</sub>**, maximas iteraciones = **ITERMAX**) (hacer mas bonito)
+Inicializar game tree donde el nodo Raiz R representa el estado **s<sub>t</sub>** 
+Repetir durante **ITERMAX** iteraciones:
+    * **Seleccion**: empezar desde el nodo raíz R y seleccionar nodos hijos sucesivos (Usando la formula UCB1) hasta alcanzar un nodo hoja L. Esto permite que el game tree se expanda hacia movimientos más prometedores, que es la esencia del algoritmo MCTS-UCT.     
     * **Expansion**: iniciar las estadisicas para el nuevo nodo L.
-    * **Simulacion**: jugar una partida aleatoria (cada movimiento simulado es una accion valida aleatoria) empezando desde el nodo L hasta llegar a un nodo terminal / hoja.
-    * **Retropropagacion**: utilizar el resultado de la simulacion para actualizar la información en los nodos en el camino de L a R.    
-**Seleccion de accion** escoger que accion tomar basado en las estadisticas calculadas durante las previas iteraciones.    
+    * **Simulacion**: jugar una partida aleatoria (cada movimiento simulado es una accion valida aleatoria) iniciando la simulacion en el estado representado por el nodo L hasta que la partida simulada termine.
+    * **Retropropagacion**: utilizar el resultado de la simulacion para actualizar la información en los nodos en el camino de L a R.
+**Seleccion de accion** escoger que accion tomar basado en las estadisticas calculadas durante las previas iteraciones.
 END
 
 #### Seleccion
@@ -87,7 +89,7 @@ Formula de UCB1: ![ucb1](https://latex.codecogs.com/gif.latex?%5Cfrac%7Bw_i%7D%7
 + **N<sub>i</sub>**: numero de simulaciones acumuladas en el nodo actualmente escogido.
 + **c**: parametro de exploracion, es una constante. Nos permite escoger entre los dos terminos de la equacion de UCB1. Un **c** grande da mas importancia a la exploracion. Un **c** pequenho (**c < 1**) da mas importancia a la explotacion. Ver (ingles) ![explotation-vs-exploration](https://medium.com/@dennybritz/exploration-vs-exploitation-f46af4cf62fe "Explotation vs Exploration")
 
-El nodo hijo **i** que reciba el valor UCB1 mas alto sera seleccionado. Esta fase de seleccion se repetira hasta que se seleccione un nodo que no este completamente expandido (que tenga nodos hijo que nunca hayan sido seleccionados) o al llegar un nodo hoja / terminal.
+Empezando en el nodo raiz R, si hay algun movimiento que no se haya seleccionado (algun movimiento para el que no haya un nodo hijo) se escogera, terminado el proceso de seleccion. En caso de que todos los mivimientos se hayan seleccionado al menos una vez, utilizamos la formula UCB1 para todos los nodos hijos. El nodo hijo **i** que reciba el valor UCB1 mas alto sera seleccionado. Esta fase de seleccion se repetira hasta que se seleccione un nodo que no este completamente expandido (que tenga nodos hijo que nunca hayan sido seleccionados) o al llegar un nodo hoja / terminal.
 
 #### Expansion
 
@@ -98,13 +100,15 @@ El paso mas sencillo. Una vez se ha seleccionado un nuevo nodo para anhadirlo en
 
 #### Simulacion
 
-En terminos generales, una simulacion es una sucesion de acciones por partes de todos los agentes que cambian el entorno hasta llegar a un estado terminal. En un game tree, una simulacion empieza en un nodo raiz y se toman acciones posibles que llevan a otros nodos. La simulacion termina cuando se llega a un nodo hoja / terminal. Terminada la iniciacion del nodo escogido por la equacion UCB1 (u otra estrategia de seleccion de nodo) comenzamos una simulacion del juego (en este taller 4 en raya) desde este nodo. Cada una de las acciones escogidas durante toda la simulacion son aleatorias (se juegan movimientos aleatorios). Se pueden utilizar acciones no aleatorias para obtener mejores resultados, pero esto no es necesario para el 4 en raya. Otros terminos utilizados para hablar de simulaciones en la literaturas son *rollout* o *playout*. (mejorar wording)
+En terminos generales, una simulacion es una sucesion de acciones por partes de todos los agentes que cambian el entorno hasta llegar a un estado terminal. En un game tree, una simulacion empieza en el estado **s** correspondiente a un nodo raiz y se toman acciones posibles que llevan a otros nodos. La simulacion termina cuando se llega a un nodo hoja / terminal.
 
-**Nota**: Todos los nodos por los que se pasa en cada simulacion *NO* forman parte del game tree que se esta formando durante MCTS-UCT. (anhadir mas clarificacion?)
+Terminada la iniciacion del nodo escogido por la equacion UCB1 (u otra estrategia de seleccion de nodo) comenzamos una simulacion del juego (en este taller 4 en raya) desde este nodo. Cada una de las acciones escogidas durante toda la simulacion son aleatorias (se juegan movimientos aleatorios). Se pueden utilizar acciones no aleatorias para obtener mejores resultados, pero esto no es necesario para el 4 en raya. Otros terminos utilizados para hablar de simulaciones en la literaturas son *rollout* o *playout*.
+
+**Nota**: Exceptuando el nodo donde comienza la simulacion todos los otros nodos por los que se pasa en cada simulacion *NO* forman parte del game tree que se esta formando durante MCTS-UCT.
 
 #### Retropropagacion
 
-Todas las estadisticas de los nodos escogidos durante la fase de **seleccion** son actualizadas con el resultado de la simulacion. En otras palabras, el resultado de la simulacion se propaga empezando por el ultimo nodo escogido en la fase de **seleccion** y terminando en el nodo raiz del game tree. Para **actualizar** las estadisticas basta con actualizar el numero de simulaciones y victorias (en caso de que la simulacion haya sido victoriosa) en cada uno de los nodos. Este proceso tambien se conoce como **backpropagation**.
+El resultado de la simulacion se propaga empezando por el nodo creado en la fase de **expansion** y terminando en el nodo raiz del game tree. Para **actualizar** las estadisticas basta con actualizar el numero de simulaciones y victorias (en caso de que la simulacion haya sido victoriosa) en cada uno de los nodos. Este proceso tambien se conoce como **backpropagation**.
 
 #### Seleccion de accion.
 
