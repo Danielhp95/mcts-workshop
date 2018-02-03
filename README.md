@@ -36,9 +36,9 @@ Para este taller, la representacion sera una matriz de 2 dimensiones, que repres
 
 El set de posibles acciones disponibles en un entorno se denomina **A**. Para este taller, un estado **s<sub>t</sub>** tendra un maximo de 7 acciones posibles, **A** =  [0, 1, 2, 3, 4, 5, 6]. Cada ![possible actions](https://latex.codecogs.com/gif.latex?a%20%5Cin%20%5B0%2C1%2C2%2C3%2C4%2C5%2C6%5D) representa la accion de colocar un ficha en una de las 7 columnas del tablero. En caso de que en un estado **s<sub>t</sub>** la columna numero **i** este llena, no se podra colocar una ficha en ella, con lo cual la accion **a<sub>i</sub>** no estara disponible en el estado **s<sub>t</sub>**.
 
-### Recompensa
+#### Recompensa
 
-Reinforcement learning se basa en encontrar una policy que devuelva la mayor recompensa acumulada. En el caso del 4 en raya, el objetivo del agente es ganar la partida. Siguiendo un orden logico: un movimiento que gane la partida otorgara al agente una recompensa de +1, cualquier otro movimiento otorgara una recompensa de 0.
+Siguiendo un orden logico: un movimiento que gane la partida otorgara al agente una recompensa de +1, cualquier otro movimiento otorgara una recompensa de 0.
 
 ### El agente
 
@@ -74,15 +74,15 @@ La idea de MCTS es la proxima. Para averiguar que accion tomar en **s<sub>t</sub
 ### Estructura del algoritmo MCTS-UCT
 El algoritmo de MCTS-UCT se divide en 4 fases, seleccion, expansion, simulacion y retropropagacion (backpropagation). El unico parametro que MCTS-UCT necesita es la cantidad de iteraciones que se le permite ejecutar antes de decidir que accion tomar. Llamaremos a este parametro **ITERMAX**.
 
-MCTS-UCT(estado inicial = **s<sub>t</sub>**, maximas iteraciones = **ITERMAX**) (hacer mas bonito)
-Inicializar game tree donde el nodo Raiz R representa el estado **s<sub>t</sub>** 
-Repetir durante **ITERMAX** iteraciones:
-    * **Seleccion**: empezar desde el nodo raíz R y seleccionar nodos hijos sucesivos (Usando la formula UCB1) hasta alcanzar un nodo hoja L. Esto permite que el game tree se expanda hacia movimientos más prometedores, que es la esencia del algoritmo MCTS-UCT.     
-    * **Expansion**: iniciar las estadisicas para el nuevo nodo L.
-    * **Simulacion**: jugar una partida aleatoria (cada movimiento simulado es una accion valida aleatoria) iniciando la simulacion en el estado representado por el nodo L hasta que la partida simulada termine.
-    * **Retropropagacion**: utilizar el resultado de la simulacion para actualizar la información en los nodos en el camino de L a R.
-**Seleccion de accion** escoger que accion tomar basado en las estadisticas calculadas durante las previas iteraciones.
-END
+MCTS-UCT(estado inicial = **s<sub>t</sub>**, maximas iteraciones = **ITERMAX**) (hacer mas bonito)    
+Inicializar game tree donde el nodo Raiz R representa el estado **s<sub>t</sub>**      
+Repetir durante **ITERMAX** iteraciones:     
+    * **Seleccion**: empezar desde el nodo raíz R y seleccionar nodos hijos sucesivos (Usando la formula UCB1) hasta alcanzar un nodo hoja L. Esto permite que el game tree se expanda hacia movimientos más prometedores, que es la esencia del algoritmo MCTS-UCT.       
+    * **Expansion**: iniciar las estadisicas para el nuevo nodo L.    
+    * **Simulacion**: jugar una partida aleatoria (cada movimiento simulado es una accion valida aleatoria) iniciando la simulacion en el estado representado por el nodo L hasta que la partida simulada termine.     
+    * **Retropropagacion**: utilizar el resultado de la simulacion para actualizar la información en los nodos en el camino de L a R.     
+**Seleccion de accion** escoger que accion tomar basado en las estadisticas calculadas durante las previas iteraciones.     
+END     
 
 #### Seleccion
 
