@@ -6,6 +6,10 @@
 
 Reinforcement Learning es una rama de inteligencia artificial que base su aprendizaje en el concepto de "prueba y error". Todo algoritmo de Reinforcement Learning presenta a un **agente** que actua en un **entorno** y recibe una **recompensa** (positiva o negativa) por cada una de sus **acciones**. El objetivo de un **agente** es encontrar una **estrategia** que maximize su **recompensa** a largo plazo.
 
+
+### Breakout video:
+![breakout video](https://www.youtube.com/watch?v=TmPfTpjtdgg)
+
 ### Loop de Reinforcement Learning.
 
 Por cada escalon de tiempo **t**:
