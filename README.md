@@ -8,7 +8,7 @@ Reinforcement Learning es una rama de inteligencia artificial que base su aprend
 
 
 ### Breakout video:
-![breakout video](https://www.youtube.com/watch?v=TmPfTpjtdgg)
+[breakout video](https://www.youtube.com/watch?v=TmPfTpjtdgg)
 
 ### Loop de Reinforcement Learning.
 
