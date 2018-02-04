@@ -4,47 +4,56 @@
 
 ![rl loop](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram.png "Diagrama Reinforcement Learning")
 
-Reinforcement Learning es una rama de inteligencia artificial que base su aprendizaje en el concepto de "prueba y error". Todo algoritmo de Reinforcement Learning presenta a un **agente** que actua en un **entorno** y recibe una **recompensa** (positiva o negativa) por cada una de sus **acciones**. El objetivo de un **agente** es encontrar una **estrategia** que maximize su **recompensa** a largo plazo.
+Reinforcement Learning es una rama de inteligencia artificial que basa su aprendizaje en el concepto de "prueba y error". Todo algoritmo de Reinforcement Learning presenta a un **agente** que actúa en un **entorno** y recibe una **recompensa** (positiva o negativa) por cada una de sus **acciones**. El objetivo de un **agente** es encontrar una **estrategia** que maximize su **recompensa** a largo plazo.
 
 
 ### Breakout video:
 [breakout video](https://www.youtube.com/watch?v=TmPfTpjtdgg)
 
-### Loop de Reinforcement Learning.
+### Bucle de Reinforcement Learning.
 
-Por cada escalon de tiempo **t**:
+Por cada escalón de tiempo **t**:
 * El Agente:
   1. Recibe recompensa **r<sub>t</sub>**
-  2. Recibe observacion **s<sub>t</sub>**
-  3. Emite accion **a<sub>t</sub>**
+  2. Recibe observación **s<sub>t</sub>**
+  3. Emite acción **a<sub>t</sub>**
 * El Entorno:
-  1. Recibe accion **a<sub>t</sub>** y la ejecuta. La ejecucion de la accion **a<sub>t</sub>** modifica el entorno.
+  1. Recibe acción **a<sub>t</sub>** y la ejecuta. La ejecución de la acción **a<sub>t</sub>** modifica el entorno.
   2. Emite recompensa **r<sub>t+1</sub>**
-  3. Emite observacion **s<sub>t+1</sub>**
+  3. Emite observación **s<sub>t+1</sub>**
+
+<br><br>
 
 ### El entorno
 
 #### Estados
 
-El entorno para este taller es el juego del 4 en ralla. Incluso para un juego tan "sencillo" como el 4 en ralla, hay 4,531,985,219,092 posibles estados.
+El entorno para este taller es el juego del 4 en raya. Incluso para un juego tan "sencillo" como el 4 en raya, hay 4,531,985,219,092 posibles estados.
 
-El set de posibles estados de un entorno se denomina **S**. Cada valor ![!s_in_S](https://latex.codecogs.com/gif.latex?s%20%5Cin%20%5Ctextbf%7BS%7D) denota una posible representacion del estado de un entorno. **s<sub>t</sub>** es la representacion del entorno para cada instante **t**. Normalmente, escoger una buena representacion del estado **s<sub>t</sub>** no es facil, y una buena representacion puede simplificar mucho la tarea de aprendizaje.
+El set de posibles estados de un entorno se denomina **S**. Cada valor ![!s_in_S](https://latex.codecogs.com/gif.latex?s%20%5Cin%20%5Ctextbf%7BS%7D) denota una posible representación del estado de un entorno. **s<sub>t</sub>** es la representación del entorno para cada instante **t**. Normalmente, escoger una buena representación del estado **s<sub>t</sub>** no es fácil, y una buena representacion puede simplificar mucho la tarea de aprendizaje.
 
-Para este taller, la representacion sera una matriz de 2 dimensiones, que representa el tablero del 4 en ralla, nos referiremos al estado como *Board* (*tablero* en ingles). *Board<sub>ij</sub>* denotara el estado de la casilla en la fila *i* y columna *j*. *Board<sub>ij</sub>* = 0: casilla vacia. *Board<sub>ij</sub>* = 1: ficha del jugador 1. *Board<sub>ij</sub>* = 2: ficha del jugador 2.
+Para este taller, la representación será una matriz de 2 dimensiones, que representa el tablero del 4 en raya, nos referiremos al estado como *Board* (*tablero* en ingles). *Board<sub>ij</sub>* denotara el estado de la casilla en la fila *i* y columna *j*. *Board<sub>ij</sub>* = 0: casilla vacia. *Board<sub>ij</sub>* = 1: ficha del jugador 1. *Board<sub>ij</sub>* = 2: ficha del jugador 2.
 
 #### Acciones
 
-El set de posibles acciones disponibles en un entorno se denomina **A**. Para este taller, un estado **s<sub>t</sub>** tendra un maximo de 7 acciones posibles, **A** =  [0, 1, 2, 3, 4, 5, 6]. Cada ![possible actions](https://latex.codecogs.com/gif.latex?a%20%5Cin%20%5B0%2C1%2C2%2C3%2C4%2C5%2C6%5D) representa la accion de colocar un ficha en una de las 7 columnas del tablero. En caso de que en un estado **s<sub>t</sub>** la columna numero **i** este llena, no se podra colocar una ficha en ella, con lo cual la accion **a<sub>i</sub>** no estara disponible en el estado **s<sub>t</sub>**.
+El set de posibles acciones disponibles en un entorno se denomina **A**. Para este taller, un estado **s<sub>t</sub>** tendrá un máximo de 7 acciones posibles, **A** =  [0, 1, 2, 3, 4, 5, 6]. Cada acción ![possible actions](https://latex.codecogs.com/gif.latex?a%20%5Cin%20%5B0%2C1%2C2%2C3%2C4%2C5%2C6%5D) representa la acción de colocar un ficha en una de las 7 columnas del tablero. En caso de que en un estado **s<sub>t</sub>** la columna número **i** este llena, no se podra colocar una ficha en ella, con lo cual la acción **a<sub>i</sub>** no se podrá ejecutar en el estado **s<sub>t</sub>**. 
+
+Cuando se ejecuta una acción **a<sub>t</sub>** en el entorno, este se modifica. Tras la modificación, el entorno presenta un nuevo estado **s<sub>t+1</sub>** junto con una recompensa **r<sub>t+1</sub>** al agente.
 
 #### Recompensa
 
-Siguiendo un orden logico: un movimiento que gane la partida otorgara al agente una recompensa de +1, cualquier otro movimiento otorgara una recompensa de 0.
+Cada posible acción, en cada estado, recibe una recompensa. Una recompensa mide, a corto plazo, lo buena o mala que es una acción en un estado concreto.
 
+Para este taller nos interesa ganar la partida. Con lo cual una acción que gane la partida otorgará al agente una recompensa de +1, cualquier otro movimiento otorgara una recompensa de 0.
+
+<br><br>
 ### El agente
 
 #### Estrategia
 
-Por cada instante **t** el agente "observa" el estado **s<sub>t</sub>**. Tras "observar" el estado **s<sub>t</sub>**, el agente escoge que accion **a<sub>t</sub>** va a ejecutar usando una **estrategia** ![policy](https://latex.codecogs.com/gif.latex?%5Cpi). Una estrategia es un mapeado de estados a acciones. Dado un estado **s<sub>t</sub>**, ![pi state_t](https://latex.codecogs.com/gif.latex?%5Cpi%28s_t%29) representa la accion **a<sub>t</sub>** que el agente ejecutaria siguiendo la estrategia ![policy](https://latex.codecogs.com/gif.latex?%5Cpi). La accion **a<sub>t</sub>** se lleva a cabo en el entorno, modificandolo. Un vez el entorno se haya modificado, este presentara un estado **s<sub>t+1</sub>** junto con una recompensa **r<sub>t+1</sub>** al agente. Una estrategia puede ser deterministica y mapear una unica accion para cada estado ![deterministic policy](https://latex.codecogs.com/gif.latex?a_t%20%3D%20%5Cpi%28%20s_t%29). Una estrategia tambien puede ser *estocastica* y mapear cada estado a una distribucion de acciones ![stochastic policy](https://latex.codecogs.com/gif.latex?a_t%20%5Csim%20%5Cpi%28s_t%29). Para este taller solo nos interesan estrategias deterministicas.
+Por cada instante **t** el agente "observa" el estado **s<sub>t</sub>**. Tras "observar" el estado **s<sub>t</sub>**, el agente escoge que acción **a<sub>t</sub>** va a ejecutar usando una **estrategia** representada por la letra griega ![policy](https://latex.codecogs.com/gif.latex?%5Cpi). Una estrategia es un mapeado de estados a acciones, y es todo lo necesario para definir el comportamiento de un agente. ![pi state_t](https://latex.codecogs.com/gif.latex?%5Cpi%28s_t%29) representa el mapeado de un estado **s<sub>t</sub>** a una acción **a<sub>t</sub>**. El "aprendizaje" de un agente en reinforcement learning es una tarea de encontrar y mejorar una estrategia ![policy](https://latex.codecogs.com/gif.latex?%5Cpi) de forma iterativa.
+
+ Una estrategia puede ser deterministica y mapear una unica accion para cada estado ![deterministic policy](https://latex.codecogs.com/gif.latex?a_t%20%3D%20%5Cpi%28%20s_t%29). Una estrategia tambien puede ser *estocastica* y mapear cada estado a una distribucion de acciones ![stochastic policy](https://latex.codecogs.com/gif.latex?a_t%20%5Csim%20%5Cpi%28s_t%29). Para este taller solo nos interesan estrategias deterministicas.
 
 
 El objetivo de un agente se basan en encontrar una estrategia ![policy](https://latex.codecogs.com/gif.latex?%5Cpi) que maximize la optima para el problema en cuestion. Donde *optimo* se considera que se consige la mayor recompensa posible.
@@ -52,7 +61,8 @@ El objetivo de un agente se basan en encontrar una estrategia ![policy](https://
 La imagen de abajo ilustra una representacion mas matematica del agente y el entorno:
 
 ![rl loop 2](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram2.png "Diagrama Reinforcement Learning")
-
+<br><br>
+<br><br>
 # Taller: Dia 1.
 
 ## Game Trees
