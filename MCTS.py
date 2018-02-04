@@ -15,7 +15,7 @@ from colorama import Fore
 class GameState:
     """
         Un GameState representa una configuracion valida del 'estado' de un juego.
-        Por ejemplo, las posiciones de todas las piezas activas en una partida de ajedrez.
+        Por ejemplo, las posiciones de todas las piezas activas en una Parteida de ajedrez.
         Las funciones presentadas en esta clase son las minimas necesarias
         para la implementacion del algoritmo UCT para cualquier juego de 2-jugadores.
 
@@ -45,7 +45,7 @@ class GameState:
         """
 
     def GetResult(self, playerJustMoved):
-        """ Devuelve el ganador de la partida desde el punto de vista de playerJustMoved.
+        """ Devuelve el ganador de la Parteida desde el punto de vista de playerJustMoved.
 
             @input playerJustMoved: (int) numero del jugador que acaba de tomar una accion.
         """
@@ -83,7 +83,7 @@ class Connect4State:
 
     def Clone(self):
         """ Crea una copia profunda del este GameState. Usado en las simulaciones 
-            dado que el GameState de la simulacion tiene que ser diferente al GameState de la partida real.
+            dado que el GameState de la simulacion tiene que ser diferente al GameState de la Parteida real.
         """
         st = Connect4State(width=self.width, height=self.height)
         st.playerJustMoved = self.playerJustMoved
@@ -109,7 +109,7 @@ class Connect4State:
         self.playerJustMoved = 3 - self.playerJustMoved # siguiente jugador
         self.board[movecol][row] = self.playerJustMoved # coloca la ficha en la celda correcta
         if self.DoesMoveWin(movecol, row):
-            self.winner = self.playerJustMoved # apunta el ganador de la partida
+            self.winner = self.playerJustMoved # apunta el ganador de la Parteida
 
     def GetMoves(self):
         """ Devuelve una array con todos los movimientos posibles - todas las columnas que tienen un espacio libre.
@@ -125,7 +125,7 @@ class Connect4State:
             @input x: index de la columna
             @input y: index de la fila
 
-            @output doesMoveWin: (boolean) True si el ultimo movimiento ha ganado la partida
+            @output doesMoveWin: (boolean) True si el ultimo movimiento ha ganado la Parteida
         """
         me = self.board[x][y]
         for (dx, dy) in [(0, +1), (+1, +1), (+1, 0), (+1, -1)]:
@@ -148,11 +148,11 @@ class Connect4State:
         return x >= 0 and x < self.width and y >= 0 and y < self.height
 
     def GetResult(self, playerJustMoved):
-        """ Devuelve el ganador de la partida desde el punto de vista de playerJustMoved.
+        """ Devuelve el ganador de la Parteida desde el punto de vista de playerJustMoved.
 
             @input playerJustMoved: (int) numero del jugador que acaba de tomar una accion.
 
-            @output: (int) 1 si el ultimo jugador en tomar una accion ha ganado la partida, 0 en cualquier otro caso.
+            @output: (int) 1 si el ultimo jugador en tomar una accion ha ganado la Parteida, 0 en cualquier otro caso.
         """
         return playerJustMoved == self.winner
 
@@ -174,17 +174,15 @@ class Connect4State:
 
 
 class Node:
-    """ Un nodo del game treee. self.wins siempre esta desde el punto de vista de playerJustMoved. (aclarar)
+    """ Un nodo del game tree. self.wins siempre esta desde el punto de vista de playerJustMoved.
     """
 
     def __init__(self, move=None, parent=None, state=None):
         self.move = move  # el move que se hizo en un state previo para llegar a este estado. "None" para el nodo raiz.
         self.parentNode = parent  # "None" para el nodo raiz
-        self.childNodes = []
-        self.wins = 0
-        self.visits = 0
-        self.untriedMoves = state.GetMoves()  # Futuros nodos hijo
-        self.playerJustMoved = state.playerJustMoved  # the only part of the state that the Node needs later
+        self.playerJustMoved = state.playerJustMoved  # the only Parte of the state that the Node needs later
+        """ Parte 1.0: Hace falta initializar mas estadisticas.
+        """
 
     def UCTSelectChild(self):
         """ Usa la formula de UCB1 para seleccionar uno de los nodos hijo:
@@ -192,8 +190,6 @@ class Node:
             la constante se usa para escoger entre exploracion o explotacion.
             En este caso, const = 1
         """
-        s = sorted(self.childNodes, key=lambda c: c.wins / c.visits + sqrt(2 * log(self.visits) / c.visits))[-1]
-        return s
 
     def AddChild(self, move, state):
         """ Quita move de la array untriedMoves y anhade un nuevo nodo hijo para este movimiento
@@ -204,10 +200,6 @@ class Node:
 
             @output node
         """
-        node = Node(move=move, parent=self, state=state)
-        self.untriedMoves.remove(move)
-        self.childNodes.append(node)
-        return node
 
     def Update(self, result):
         """ Actualiza las estadisticas guardadas en este nodo.
@@ -217,90 +209,48 @@ class Node:
             @input result: (int) 1 denota victoria, 0 para el resto de los casos.
             @output void
         """
-        self.visits += 1
-        self.wins += result
-
-    """ Funciones para debuggear y modo verbose
-    """
-    def __repr__(self):
-        return "[M:" + str(self.move) + " W/V:" + str(self.wins) + "/" + str(self.visits) + " U:" + str(
-            self.untriedMoves) + "]"
-
-    def TreeToString(self, indent):
-        s = self.IndentString(indent) + str(self)
-        for c in self.childNodes:
-            s += c.TreeToString(indent + 1)
-        return s
-
-    def IndentString(self, indent):
-        s = "\n"
-        for i in range(1, indent + 1):
-            s += "| "
-        return s
-
-    def ChildrenToString(self):
-        s = ""
-        for c in self.childNodes:
-            s += str(c) + "\n"
-        return s
 
 
-def UCT(rootstate, itermax, verbose=False):
+def UCT(rootstate, itermax):
     """ Conduce una busqueda con el algoritmo MCTS-UCT durante itermax iteraciones empezando desde rootstate.
         Assume 2 jugadores que se alternan, con resultados finales en el rango [0.0, 1.0].
 
-        @input itermax: (int) numero de simulaciones (partidas) que se van a ejecutar antes de decidir que accion tomar.
+        @input itermax: (int) numero de simulaciones (Parteidas) que se van a ejecutar antes de decidir que accion tomar.
 
         @output move: (int) accion que llevar a cabo este turno.
     """
 
     rootnode = Node(state=rootstate)
 
-    for i in range(itermax):
-        node = rootnode
-        state = rootstate.Clone()
+    '''
+    Parte 1.1: establecer el numero de iteraciones
+    '''
 
-        '''
-        Part 1.1: Fase Seleccion
-        '''
-        while node.untriedMoves == [] and node.childNodes != []:  # Mientras el nodo este completamente expandido y non sea terminal
-            node = node.UCTSelectChild()
-            state.DoMove(node.move)
+    '''
+    Parte 1.2: Fase Seleccion
+    '''
 
 
-        '''
-        part 1.2: fase seleccion
-        '''
-        if node.untriedMoves != []:  # if we can expand (i.e. state/node is non-terminal)
-            m = random.choice(node.untriedMoves)
-            state.DoMove(m)
-            node = node.AddChild(m, state)  # add child and descend tree
+    '''
+    Parte 1.3: fase seleccion
+    '''
 
-        '''
-        part 1.3: fase Simulacion
-        '''
-        while state.GetMoves() != []:  # while state is non-terminal
-            state.DoMove(random.choice(state.GetMoves()))
 
-        '''
-        part 1.3: fase Retropropagacion
-        '''
-        # Backpropagate
-        while node is not None:  # backpropagate from the expanded node and work back to the root node
-            node.Update(state.GetResult(node.playerJustMoved))  # Update node with result from POV of node.playerJustMoved
-            node = node.parentNode
+    '''
+    Parte 1.4: fase Simulacion
+    '''
 
-        '''
-        part 1.3: fase Seleccion de accion
-        '''
-        move = sorted(rootnode.childNodes, key=lambda c: c.wins / c.visits)[-1].move
 
-    # Output some information about the tree - can be omitted
-    if (verbose):
-        print(rootnode.TreeToString(0))
-    else:
-        print(rootnode.ChildrenToString())
+    '''
+    Parte 1.5: fase Retropropagacion
+    '''
 
+
+    '''
+    Parte 1.6: fase Seleccion de accion
+    '''
+
+    move = None # Cambiar cuando se conozca el nodo
     return move
 
 
@@ -309,24 +259,25 @@ def UCT(rootstate, itermax, verbose=False):
 
 
 def PlayGame(initialState):
-    """ Play a sample game between two UCT players where each player gets a different number
-        of UCT iterations (= simulations = tree nodes).
+    """ Jugar una Parteida!
+	
+	@input initialState: estado inicial donde comienza la Parteida
     """
     state = initialState
-    while not state.IsGameOver():  # while not terminal state
+    while not state.IsGameOver():  # mientras no hayamos llegadoo a un estado terminal
         print(str(state))
         if state.playerJustMoved == 1:
             # JUGADOR 2
-            m = HumanInput(state)
+            move = HumanInput(state)
         else:
             # JUGADOR 1
-            m = UCT(rootstate=state, itermax=10000, verbose=False)  # play with values for itermax and verbose = True
-        state.DoMove(m)
+            move = HumanInput(state)
+        state.DoMove(move)
     PrintResults(state)    
 
 def PrintResults(state):
-    """ Imprime los resultados de la partida una vez terminada
-        Esta funcion asume que la partida ya ha terminado
+    """ Imprime los resultados de la Parteida una vez terminada
+        Esta funcion asume que la Parteida ya ha terminado
     """
     if state.GetResult(state.playerJustMoved) == 1.0:
         print(str(state))
