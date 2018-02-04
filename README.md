@@ -42,7 +42,7 @@ Cuando se ejecuta una acción **a<sub>t</sub>** en el entorno, este se modifica.
 
 ### Recompensa
 
-Cada posible acción, en cada estado, recibe una recompensa. Una recompensa mide, a corto plazo, lo buena o mala que es una acción en un estado concreto.
+Cada posible acción, en cada estado, tiene asociada una recompensa. Una recompensa mide, a corto plazo, lo buena o mala que es una acción en un estado concreto.
 
 Para este taller nos interesa ganar la partida. Con lo cual una acción que gane la partida otorgará al agente una recompensa de +1, cualquier otro movimiento otorgara una recompensa de 0.
 
@@ -65,9 +65,7 @@ Por cada instante **t** el agente "observa" el estado **s<sub>t</sub>**. Tras "o
 
 ## Monte Carlo Tree Search (MCTS)
 
-MCTS es un [método de Monte Carlo](https://es.wikipedia.org/wiki/M%C3%A9todo_de_Montecarlo "método de Monte Carlo"). Los métodos de Monte Carlo se basan en la siguiente idea: hay un fenómeno (una expresión matemática compleja, como la estrategia óptima para un agente) que queremos estudiar. El fenómeno es generalmente una expresión matemática compleja, con lo que intentamos aproximarlo. Los métodos de Monte Carlo son métodos de aproximación estadísticos.
-
-Tenemos acceso a un modelo (un simulador) del entorno donde ocurre de este fenómeno. Utilizando el modelo podemos generar muchas simulaciones. Con ellas, podemos calcular estadísticas pertinentes del fenómeno que queremos estudiar. En el campo de inteligencia artificial para videojuegos, el modelo son las reglas del juego. Dado un estado **s<sub>t</sub>** en un entorno, el fenomeno a averiguar es el valor de ejecutar cada accion en **s<sub>t</sub>**.
+MCTS es un [método de Monte Carlo](https://es.wikipedia.org/wiki/M%C3%A9todo_de_Montecarlo "método de Monte Carlo"). Los métodos de Monte Carlo son métodos de aproximación estadísticos que se basan en la siguiente idea: hay un fenómeno que queremos estudiar. Este fenómeno es generalmente una expresión matemática compleja, con lo que intentamos aproximarlo. Para ello, tenemos acceso a un modelo (un simulador) del entorno donde ocurre este fenómeno. Utilizando el modelo podemos generar muchas simulaciones. Con ellas, podemos calcular estadísticas pertinentes del fenómeno que queremos estudiar. En el campo de inteligencia artificial para videojuegos, el modelo suele ser las reglas del juego. Dado un estado **s<sub>t</sub>** en un entorno, el fenómeno a averiguar es el valor de cada posible acción **a<sub>t</sub>** en un estado **s<sub>t</sub>**. Si tenemos una aproximación del valor real de cada acción posible **a<sub>t</sub>** para cada estado **s<sub>t</sub>**, podemos escoger la acción de mayor valor en cada momento **t** para jugar de forma óptima.
 
 
 ## Monte Carlo Tree Search - Upper Confidence Bound applied to Trees (MCTS-UCT)
@@ -77,6 +75,8 @@ Tenemos acceso a un modelo (un simulador) del entorno donde ocurre de este fenó
 Monte Carlo Tree Search - Upper Confidence Bound applied to Trees (MCTS-UCT) es un algoritmo que se usa para aproximar la estrategia óptima para un agente a cada paso de la partida. MCTS-UCT se usa para responder a la siguiente pregunta. Dado un estado **s<sub>t</sub>** ¿Qué acción **a<sub>t</sub>** nos dará una mayor recompensa a largo plazo? Que es lo mismo que preguntar ¿Qué acción tiene mas probabilidades de ganar la partida? Si un agente utiliza MCTS-UCT en cada uno de sus turnos, está aproximando en todo momento la decisión óptima.
 
 La idea de MCTS-UCT es la próxima. Para averiguar que acción **a<sub>t</sub>** tomar en **s<sub>t</sub>**, simulamos muchisimas partidas, con cada partida aprendemos estadisticas que nos informan sobre lo buena (o mala) que es una acción en el estado **s<sub>t</sub>**. Con estas estadísticas, escogemos que acciones vamos descartando y que acciones prometedoras seguimos investigando.
+
+<br><br>
 
 ### Estructura del algoritmo MCTS-UCT
 El algoritmo de MCTS-UCT se divide en 4 fases, seleccion, expansion, simulacion y retropropagacion (backpropagation). El único parámetro que MCTS-UCT necesita es la cantidad de iteraciones que se le permite ejecutar antes de decidir que accion tomar. Llamaremos a este parametro **ITERMAX**.
@@ -91,40 +91,39 @@ Repetir durante **ITERMAX** iteraciones:
 **Seleccion de accion** escoger que accion tomar basado en las estadisticas calculadas durante las previas iteraciones.     
 END     
 
-#### Seleccion
+#### Selección
 
-Formula de UCB1: ![ucb1](https://latex.codecogs.com/gif.latex?%5Cfrac%7Bw_i%7D%7Bn_i%7D%20&plus;%20c%20%5Csqrt%7B%5Cfrac%7B%5Cln%20N_i%7D%7Bn_i%7D%7D)
+Fórmula de UCB1: ![ucb1](https://latex.codecogs.com/gif.latex?%5Cfrac%7Bw_i%7D%7Bn_i%7D%20&plus;%20c%20%5Csqrt%7B%5Cfrac%7B%5Cln%20N_i%7D%7Bn_i%7D%7D)
 
-+ **w<sub>i</sub>**: numero de victorias acumuladas en el nodo hijo **i**.
-+ **n<sub>i</sub>**: numero de simulaciones acumuladas en el nodo hijo **i**.
-+ **N<sub>i</sub>**: numero de simulaciones acumuladas en el nodo actualmente escogido.
-+ **c**: parametro de exploracion, es una constante. Nos permite escoger entre los dos terminos de la equacion de UCB1. Un **c** grande da mas importancia a la exploracion. Un **c** pequenho (**c < 1**) da mas importancia a la explotacion. Ver (ingles) [explotation-vs-exploration](https://medium.com/@dennybritz/exploration-vs-exploitation-f46af4cf62fe "Explotation vs Exploration")
++ **w<sub>i</sub>**: número de victorias acumuladas en el nodo hijo **i**.
++ **n<sub>i</sub>**: número de simulaciones acumuladas en el nodo hijo **i**.
++ **N<sub>i</sub>**: número de simulaciones acumuladas en el nodo actualmente seleccionado.
++ **c**: parametro de exploracion, es una constante. Nos permite escoger entre los dos términos de la equación de UCB1. Un **c** grande da más importancia a la exploracion. Un **c** pequeño (**c < 1**) da más importancia a la explotación. Ver (ingles) [explotación-vs-exploración](https://medium.com/@dennybritz/exploration-vs-exploitation-f46af4cf62fe "Explotation vs Exploration")
 
-Empezando en el nodo raiz R, si hay algun movimiento que no se haya seleccionado (algun movimiento para el que no haya un nodo hijo) se escogera, terminado el proceso de seleccion. En caso de que todos los mivimientos se hayan seleccionado al menos una vez, utilizamos la formula UCB1 para todos los nodos hijos. El nodo hijo **i** que reciba el valor UCB1 mas alto sera seleccionado. Esta fase de seleccion se repetira hasta que se seleccione un nodo que no este completamente expandido (que tenga nodos hijo que nunca hayan sido seleccionados) o al llegar un nodo hoja / terminal.
+Esta fase empieza seleccinando el nodo raiz R. En caso de que todos los movimientos se hayan seleccionado al menos una vez, aplicamos la fórmula UCB1 a todos los nodos hijo y seleccionamos el que de un valor mayor. Es decir, el nodo hijo **i** que reciba el valor UCB1 mas alto sera seleccionado. Este proceso se repite hasta que se seleccione un nodo que no este completamente expandido (que tenga nodos hijo que nunca hayan sido seleccionados) o al llegar un nodo hoja / terminal. Si seleccionamos un nodo el cual tiene algún movimiento que no se haya expandido, expandimos uno de estos movimientos no seleccionados, terminado la fase de selección.
 
-#### Expansion
+#### Expansión
 
-El paso mas sencillo. Una vez se ha seleccionado un nuevo nodo para anhadirlo en el game tree, este se iniciara con contadores para diferentes estadisticas que serviran para guiar la fase de **seleccion** en futuras iteraciones. Viendo la equacion de UCB1 las estadisticas que nos interesa guardar son:
+El paso mas sencillo. Una vez se ha seleccionado un nuevo hacemos dos cosas. Primero, lo añadimos al game tree que se esta construyendo en la ejecución de MCTS-UCT. Segundo, lo iniciamos con contadores para diferentes estadísticas que serviran para guiar la fase de **selección** en futuras iteraciones. Viendo la equacion de UCB1 las estadísticas que nos interesa guardar son:
 
-+ **w<sub>i</sub>**: numero de victorias acumuladas en el nodo hijo **i**.
-+ **n<sub>i</sub>**: numero de simulaciones acumuladas en el nodo hijo **i**.
++ **w<sub>i</sub>**: número de victorias acumuladas en el nodo hijo **i**.
++ **n<sub>i</sub>**: número de veces que el nodo hijo **i** ha sido seleccionado.
 
-#### Simulacion
+#### Simulación
 
-En terminos generales, una simulacion es una sucesion de acciones por partes de todos los agentes que cambian el entorno hasta llegar a un estado terminal. En un game tree, una simulacion empieza en el estado **s** correspondiente a un nodo raiz y se toman acciones posibles que llevan a otros nodos. La simulacion termina cuando se llega a un nodo hoja / terminal.
+En términos generales, una simulación es una sucesion de acciones por partes de todos los agentes que cambian el entorno hasta llegar a un estado terminal. En un game tree, una simulacion empieza en el estado **s** correspondiente a un nodo raiz y se toman acciones posibles que llevan a otros nodos. La simulacion termina cuando se llega a un nodo hoja / terminal.
 
-Terminada la iniciacion del nodo escogido por la equacion UCB1 (u otra estrategia de seleccion de nodo) comenzamos una simulacion del juego (en este taller 4 en raya) desde este nodo. Cada una de las acciones escogidas durante toda la simulacion son aleatorias (se juegan movimientos aleatorios). Se pueden utilizar acciones no aleatorias para obtener mejores resultados, pero esto no es necesario para el 4 en raya. Otros terminos utilizados para hablar de simulaciones en la literaturas son *rollout* o *playout*.
+Terminada la expansión del nodo escogido, comenzamos una simulacion del juego (en este taller 4 en raya) desde este nodo. Cada una de las acciones escogidas durante toda la simulacion son aleatorias (los dos agentes juegan movimientos aleatorios). Otros terminos utilizados para hablar de simulaciones en la literaturas son *rollout* o *playout*.
 
 **Nota**: Exceptuando el nodo donde comienza la simulacion todos los otros nodos por los que se pasa en cada simulacion *NO* forman parte del game tree que se esta formando durante MCTS-UCT.
 
-#### Retropropagacion
+#### Retropropagación
 
-El resultado de la simulacion se propaga empezando por el nodo creado en la fase de **expansion** y terminando en el nodo raiz del game tree. Para **actualizar** las estadisticas basta con actualizar el numero de simulaciones y victorias (en caso de que la simulacion haya sido victoriosa) en cada uno de los nodos. Este proceso tambien se conoce como **backpropagation**.
+El resultado de la simulación se propaga por todos los nodos del game tree empezando por el nodo creado en la fase de **expansión** y terminando en el nodo raiz del game tree. Para **actualizar** las estadísticas basta con actualizar el número de simulaciones y victorias (en caso de que la simulación haya sido victoriosa) en cada uno de los nodos. Este proceso también se conoce como **backpropagation**.
 
-#### Seleccion de accion.
+#### Selección de acción.
 
-El uso de las estadisticas calculadas durante las previas fases es la de seleccionar una accion **a<sub>t</sub>** para tomar en el movimiento numero **t**. Donde **s<sub>t</sub>** es el estado correspondiente al nodo raiz del game tree generado por MCTS-UCT. Hay varias posbilidades para escoger que accion tomar una vez tenemos un game tree suficientemente grande. Nosotros utilizaremos una idea sencillla. Inspeccionamos a todos los nodos hijo correspondientes al nodo raiz y tomamos el que tiene un valor mayor de posibilidad de victoria. Tomamos la accion asignada al nodo hijo **c** cuyas estadisticas maximizen la equacion: 
-
+El uso de las estadisticas calculadas durante las previas fases es la de seleccionar una accion **a<sub>t</sub>** para tomar en el movimiento numero **t**. Donde **s<sub>t</sub>** es el estado correspondiente al nodo raiz del game tree generado por MCTS-UCT. Inspeccionamos a todos los nodos hijo correspondientes al nodo raiz y tomamos el que tiene un valor mayor de posibilidad de victoria. Tomamos la accion asignada al nodo hijo **c** cuyas estadisticas maximizen la equacion: 
 
 + **w<sub>c</sub>**: numero de victorias acumuladas en el nodo hijo **c**.
 + **n<sub>c</sub>**: numero de simulaciones acumuladas en el nodo hijo **c**.
