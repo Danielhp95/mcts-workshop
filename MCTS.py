@@ -294,7 +294,6 @@ def HumanInput(state):
 	 Haz nota de como los indices de las columans van de [0,6], pero el input se toma de [1,7]
 	 Esto se hace para que sea mas comodo jugar desde el teclado
     """
-
     valid_moves = state.GetMoves()
     move = None
     while move not in valid_moves:
