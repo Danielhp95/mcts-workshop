@@ -1,4 +1,5 @@
 colorama-test/
 images/gif/*.png
+images/gif/*.txt
 *.py.sw*
 *.md.sw*
