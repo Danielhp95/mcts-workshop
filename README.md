@@ -125,8 +125,8 @@ El resultado de la simulación se propaga por todos los nodos del game tree empe
 
 El uso de las estadisticas calculadas durante las previas fases es la de seleccionar una accion **a<sub>t</sub>** para tomar en el movimiento numero **t**. Donde **s<sub>t</sub>** es el estado correspondiente al nodo raiz del game tree generado por MCTS-UCT. Inspeccionamos a todos los nodos hijo correspondientes al nodo raiz y tomamos el que tiene un valor mayor de posibilidad de victoria. Tomamos la accion asignada al nodo hijo **c** cuyas estadisticas maximizen la equacion: 
 
-+ **w<sub>c</sub>**: numero de victorias acumuladas en el nodo hijo **c**.
-+ **n<sub>c</sub>**: numero de simulaciones acumuladas en el nodo hijo **c**.
++ **w<sub>c</sub>**: número de victorias acumuladas en el nodo hijo **c**.
++ **n<sub>c</sub>**: número de simulaciones acumuladas en el nodo hijo **c**.
 
 <br><br>
 ### Animacion de MCTS
