@@ -74,7 +74,7 @@ Tenemos acceso a un modelo (un simulador) del entorno donde ocurre de este fenó
 
 ![mcts diagram](https://github.com/Danielhp95/mcts-workshop/blob/master/images/UCT-diagram.png "Diagrama MCTS-UCT")
 
-Monte Carlo Tree Search - Upper Confidence Bound applied to Trees (MCTS-UCT) es un algoritmo que se usa para aproximar la estrategia óptima para un agente. MCTS-UCT se usa para responder a la siguiente pregunta. Dado un estado **s<sub>t</sub>** ¿Qué acción **a<sub>t</sub>** nos dará una mayor recompensa a largo plazo? Que es lo mismo que preguntar ¿Qué acción tiene mas probabilidades de ganar la partida? Si un agente utiliza MCTS-UCT en cada uno de sus turnos, está aproximando en todo momento la decisión óptima.
+Monte Carlo Tree Search - Upper Confidence Bound applied to Trees (MCTS-UCT) es un algoritmo que se usa para aproximar la estrategia óptima para un agente a cada paso de la partida. MCTS-UCT se usa para responder a la siguiente pregunta. Dado un estado **s<sub>t</sub>** ¿Qué acción **a<sub>t</sub>** nos dará una mayor recompensa a largo plazo? Que es lo mismo que preguntar ¿Qué acción tiene mas probabilidades de ganar la partida? Si un agente utiliza MCTS-UCT en cada uno de sus turnos, está aproximando en todo momento la decisión óptima.
 
 La idea de MCTS-UCT es la próxima. Para averiguar que acción **a<sub>t</sub>** tomar en **s<sub>t</sub>**, simulamos muchisimas partidas, con cada partida aprendemos estadisticas que nos informan sobre lo buena (o mala) que es una acción en el estado **s<sub>t</sub>**. Con estas estadísticas, escogemos que acciones vamos descartando y que acciones prometedoras seguimos investigando.
 
@@ -129,23 +129,18 @@ El uso de las estadisticas calculadas durante las previas fases es la de selecci
 + **w<sub>c</sub>**: numero de victorias acumuladas en el nodo hijo **c**.
 + **n<sub>c</sub>**: numero de simulaciones acumuladas en el nodo hijo **c**.
 
+<br><br>
 ### Animacion de MCTS
 
 ![mcts animation](https://github.com/Danielhp95/taller-mcts-coruna/blob/master/images/gif/gif.gif)
 
 
-## Terminologia
-**Juego de informacion completa:** Toda la informacion del juego (en caso del 4 en raya, la posicion de todas las piezas) y las reglas del juego son conocidas por todos los agentes (jugadores).    
-**Juego deterministico:** Cada movimiento tiene un resultado unico. Es decir, cada movimiento solo tiene una posible resultado. Si esto no fuera asi, el juego seria estocastico.    
-**Nodo terminal:** Un nodo que no tiene ningun movimiento posible (porque, por ejemplo, uno de los jugadores ha ganado).
-
 ## El Reto
+¡Implementa el algoritmo MCTS-UCT en python para jugar al 4 en raya contra una inteligencia artificial! 
 
-Programar una implementacion del algoritmo MCTS-UCT descrito arriba para el juego del 4 en raya.
+### Instalación
 
-### Instalacion
-
-Necesitaras Python 2.7 para este ejercicio. El script solo tiene una dependencia: `colorama`, un modulo para imprimir texto con colores en la terminal, su uso en este ejercicio es puramente estetico. La implementacion del algoritmo no requiere ninguna herramienta que no venga dentro de la distribucion estandard de Python 2.7. Para instalar `colorama`:
+Necesitarás Python 2.7 para este ejercicio. La implementación del algoritmo no requiere ninguna herramienta que no venga dentro de la distribucion estandard de Python 2.7. El script solo tiene una dependencia: `colorama`, un módulo para imprimir texto con colores en la terminal, su uso en este ejercicio es puramente estético ¿Pero quién no quiero tener texto de colores en la terminal? Para instalar `colorama`:
 
 ```python
 pip install colorama
@@ -156,6 +151,3 @@ pip install colorama
 El script `MCTS.py` contiene todo el código necesario para los dos talleres. También es el único archivo que deberá ser modificado durante los talleres. Su contenido está escrito en inglés para facilitar busquedas relacionadas en internet. Los comentarios están en español. Utiliza los comentarios dentro del codigo como documentación del mismo.
 
 Para jugar una partida entre 2 humanos ejecuta: `python MCTS.py`
-## Ejercicio
-
-Implementa el algoritmo MCTS-UCT para jugar al 4 en raya contra una inteligencia artificial!
