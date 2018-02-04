@@ -46,28 +46,21 @@ Cada posible acción, en cada estado, recibe una recompensa. Una recompensa mide
 
 Para este taller nos interesa ganar la partida. Con lo cual una acción que gane la partida otorgará al agente una recompensa de +1, cualquier otro movimiento otorgara una recompensa de 0.
 
-<br><br>
+<br>
 ### El agente
 
 #### Estrategia
 
-Por cada instante **t** el agente "observa" el estado **s<sub>t</sub>**. Tras "observar" el estado **s<sub>t</sub>**, el agente escoge que acción **a<sub>t</sub>** va a ejecutar usando una **estrategia** representada por la letra griega ![policy](https://latex.codecogs.com/gif.latex?%5Cpi). Una estrategia es un mapeado de estados a acciones, y es todo lo necesario para definir el comportamiento de un agente. ![pi state_t](https://latex.codecogs.com/gif.latex?%5Cpi%28s_t%29) representa el mapeado de un estado **s<sub>t</sub>** a una acción **a<sub>t</sub>**. El "aprendizaje" de un agente en reinforcement learning es una tarea de encontrar y mejorar una estrategia ![policy](https://latex.codecogs.com/gif.latex?%5Cpi) de forma iterativa.
+Por cada instante **t** el agente "observa" el estado **s<sub>t</sub>**. Tras "observar" el estado **s<sub>t</sub>**, el agente escoge que acción **a<sub>t</sub>** va a ejecutar usando una **estrategia** representada por la letra griega ![policy](https://latex.codecogs.com/gif.latex?%5Cpi). Una estrategia es un mapeado de estados a acciones, y es todo lo necesario para definir el comportamiento de un agente. ![pi state_t](https://latex.codecogs.com/gif.latex?%5Cpi%28s_t%29) representa el mapeado de un estado **s<sub>t</sub>** a una acción **a<sub>t</sub>**. La tarea de "aprendizaje" de un agente en reinforcement learning es la tarea de encontrar una estrategia ![policy](https://latex.codecogs.com/gif.latex?%5Cpi) que maximize su recompensa a largo plazo a partir de recompensas a corto plazo.
 
- Una estrategia puede ser deterministica y mapear una unica accion para cada estado ![deterministic policy](https://latex.codecogs.com/gif.latex?a_t%20%3D%20%5Cpi%28%20s_t%29). Una estrategia tambien puede ser *estocastica* y mapear cada estado a una distribucion de acciones ![stochastic policy](https://latex.codecogs.com/gif.latex?a_t%20%5Csim%20%5Cpi%28s_t%29). Para este taller solo nos interesan estrategias deterministicas.
+<br>
 
-
-El objetivo de un agente se basan en encontrar una estrategia ![policy](https://latex.codecogs.com/gif.latex?%5Cpi) que maximize la optima para el problema en cuestion. Donde *optimo* se considera que se consige la mayor recompensa posible.
-
-La imagen de abajo ilustra una representacion mas matematica del agente y el entorno:
-
+### Representación de un agente y un entorno.
 ![rl loop 2](https://github.com/Danielhp95/mcts-workshop/blob/master/images/RL-diagram2.png "Diagrama Reinforcement Learning")
 <br><br>
 <br><br>
-# Taller: Dia 1.
 
-## Game Trees
-
-Un game tree es un arbol donde los nodos son estados **s<sub>0</sub>**,**s<sub>1</sub>**,**s<sub>2</sub>**...**s<sub>T</sub>** y los enlaces corresponden a acciones permitidas en ese estado **a<sub>1</sub>**,**a<sub>2</sub>**,**a<sub>3</sub>**...**a<sub>n</sub>**. El nodo raiz no tiene por que corresponder al estado inicial del juego (en el caso del 4 en raya, un tablero vacio). MEJORAR
+# Taller
 
 ## Monte Carlo Tree Search (MCTS)
 
@@ -156,43 +149,9 @@ pip install colorama
 
 ## El script
 
-El script `MCTS.py` contiene todo el codigo necesario para los dos talleres. Tambien es el unico archivo que debera ser modificado durante los talleres. Su contenido esta escrito en ingles para facilitar busquedas relacionadas en internet. Los comentarios estan en espanhol. Utiliza los comentarios dentro del codigo como documentacion.
+El script `MCTS.py` contiene todo el código necesario para los dos talleres. También es el único archivo que deberá ser modificado durante los talleres. Su contenido está escrito en inglés para facilitar busquedas relacionadas en internet. Los comentarios están en español. Utiliza los comentarios dentro del codigo como documentación del mismo.
 
-```python
-class GameState
-```
-Interfaz minima y necesaria para crear un estado de juego que sea compatible con el algoritmo MCTS-UCT. Sirve para entender la implementacion de la clase `class Connect4State` y como referencia para el ejercicio del dia 2. 
-
-
-```python
-class Connect4State
-```
-
-
-```python
-class Node
-```
-
-
-```python
-def PlayGame
-```
-
-
-
-
-## TODO
-### Introduction
-* Polish everything
-* Add mathematical equations
-* Give more workshop specific comments
-
-### MCTS
-    * Explotation vs Exploration link
-
-### El reto
-* Dar una pauta de guia para donde empezar y decir que se me pueden hacer preguntas. El internet es tu amigo.
-
+Para jugar una partida entre 2 humanos ejecuta: `python MCTS.py`
 ## Ejercicio
 
-Explicar como correr una partida contra otro jugador. Como jugar contra la maquina.
+Implementa el algoritmo MCTS-UCT para jugar al 4 en raya contra una inteligencia artificial!
