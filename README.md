@@ -24,9 +24,9 @@ Por cada escalón de tiempo **t**:
 
 <br><br>
 
-### El entorno
+## El entorno
 
-#### Estados
+### Estados
 
 El entorno para este taller es el juego del 4 en raya. Incluso para un juego tan "sencillo" como el 4 en raya, hay 4,531,985,219,092 posibles estados.
 
@@ -34,22 +34,23 @@ El set de posibles estados de un entorno se denomina **S**. Cada valor ![!s_in_S
 
 Para este taller, la representación será una matriz de 2 dimensiones, que representa el tablero del 4 en raya, nos referiremos al estado como *Board* (*tablero* en ingles). *Board<sub>ij</sub>* denotara el estado de la casilla en la fila *i* y columna *j*. *Board<sub>ij</sub>* = 0: casilla vacia. *Board<sub>ij</sub>* = 1: ficha del jugador 1. *Board<sub>ij</sub>* = 2: ficha del jugador 2.
 
-#### Acciones
+### Acciones
 
 El set de posibles acciones disponibles en un entorno se denomina **A**. Para este taller, un estado **s<sub>t</sub>** tendrá un máximo de 7 acciones posibles, **A** =  [0, 1, 2, 3, 4, 5, 6]. Cada acción ![possible actions](https://latex.codecogs.com/gif.latex?a%20%5Cin%20%5B0%2C1%2C2%2C3%2C4%2C5%2C6%5D) representa la acción de colocar un ficha en una de las 7 columnas del tablero. En caso de que en un estado **s<sub>t</sub>** la columna número **i** este llena, no se podra colocar una ficha en ella, con lo cual la acción **a<sub>i</sub>** no se podrá ejecutar en el estado **s<sub>t</sub>**. 
 
 Cuando se ejecuta una acción **a<sub>t</sub>** en el entorno, este se modifica. Tras la modificación, el entorno presenta un nuevo estado **s<sub>t+1</sub>** junto con una recompensa **r<sub>t+1</sub>** al agente.
 
-#### Recompensa
+### Recompensa
 
 Cada posible acción, en cada estado, recibe una recompensa. Una recompensa mide, a corto plazo, lo buena o mala que es una acción en un estado concreto.
 
 Para este taller nos interesa ganar la partida. Con lo cual una acción que gane la partida otorgará al agente una recompensa de +1, cualquier otro movimiento otorgara una recompensa de 0.
 
 <br>
-### El agente
 
-#### Estrategia
+## El agente
+
+### Estrategia
 
 Por cada instante **t** el agente "observa" el estado **s<sub>t</sub>**. Tras "observar" el estado **s<sub>t</sub>**, el agente escoge que acción **a<sub>t</sub>** va a ejecutar usando una **estrategia** representada por la letra griega ![policy](https://latex.codecogs.com/gif.latex?%5Cpi). Una estrategia es un mapeado de estados a acciones, y es todo lo necesario para definir el comportamiento de un agente. ![pi state_t](https://latex.codecogs.com/gif.latex?%5Cpi%28s_t%29) representa el mapeado de un estado **s<sub>t</sub>** a una acción **a<sub>t</sub>**. La tarea de "aprendizaje" de un agente en reinforcement learning es la tarea de encontrar una estrategia ![policy](https://latex.codecogs.com/gif.latex?%5Cpi) que maximize su recompensa a largo plazo a partir de recompensas a corto plazo.
 
@@ -64,18 +65,21 @@ Por cada instante **t** el agente "observa" el estado **s<sub>t</sub>**. Tras "o
 
 ## Monte Carlo Tree Search (MCTS)
 
-MCTS es un metodo de Monte Carlo. Los metodos de Monte Carlo se basan en la siguiente idea: hay un fenomeno que queremos estudiar y tenemos acceso a un modelo (un simulador) de este fenomeno. Utilizando el modelo podemos generar muchas simulaciones de este fenomeno. Con estas simulaciones podemos calcular estadisticas  pertinentes del fenomeno que queremos estudiar. En el campo de inteligencia artificial para videojuegos, el modelo son las regls del juego. Dado un estado **s<sub>t</sub>** en un entorno, el fenomeno a averiguar es el valor de ejecutar cada accion en **s<sub>t</sub>**.
+MCTS es un [método de Monte Carlo](https://es.wikipedia.org/wiki/M%C3%A9todo_de_Montecarlo "método de Monte Carlo"). Los métodos de Monte Carlo se basan en la siguiente idea: hay un fenómeno (una expresión matemática compleja, como la estrategia óptima para un agente) que queremos estudiar. El fenómeno es generalmente una expresión matemática compleja, con lo que intentamos aproximarlo. Los métodos de Monte Carlo son métodos de aproximación estadísticos.
 
-Siendo mas concretos, utilizamos MCTS para responder a la siguiente pregunta. Dado un estado **s<sub>t</sub>** (signo de pregunta) que accion **a<sub>t</sub>** nos dara una mayor probabilidad de ganar la partida?
+Tenemos acceso a un modelo (un simulador) del entorno donde ocurre de este fenómeno. Utilizando el modelo podemos generar muchas simulaciones. Con ellas, podemos calcular estadísticas pertinentes del fenómeno que queremos estudiar. En el campo de inteligencia artificial para videojuegos, el modelo son las reglas del juego. Dado un estado **s<sub>t</sub>** en un entorno, el fenomeno a averiguar es el valor de ejecutar cada accion en **s<sub>t</sub>**.
+
 
 ## Monte Carlo Tree Search - Upper Confidence Bound applied to Trees (MCTS-UCT)
 
 ![mcts diagram](https://github.com/Danielhp95/mcts-workshop/blob/master/images/UCT-diagram.png "Diagrama MCTS-UCT")
 
-La idea de MCTS es la proxima. Para averiguar que accion tomar en **s<sub>t</sub>**, simulamos muchisimas partidas, con cada partida aprendemos estadisticas que nos informan sobre lo buena (o mala) que es una accion ejecutada en el estado **s<sub>t</sub>**. Con estas estadisticas, guiamos la exploracion. La exploracion guia que acciones vamos a investigar y que acciones vamos a dejar atras porque no son suficientemente buenas.
+Monte Carlo Tree Search - Upper Confidence Bound applied to Trees (MCTS-UCT) es un algoritmo que se usa para aproximar la estrategia óptima para un agente. MCTS-UCT se usa para responder a la siguiente pregunta. Dado un estado **s<sub>t</sub>** ¿Qué acción **a<sub>t</sub>** nos dará una mayor recompensa a largo plazo? Que es lo mismo que preguntar ¿Qué acción tiene mas probabilidades de ganar la partida? Si un agente utiliza MCTS-UCT en cada uno de sus turnos, está aproximando en todo momento la decisión óptima.
+
+La idea de MCTS-UCT es la próxima. Para averiguar que acción **a<sub>t</sub>** tomar en **s<sub>t</sub>**, simulamos muchisimas partidas, con cada partida aprendemos estadisticas que nos informan sobre lo buena (o mala) que es una acción en el estado **s<sub>t</sub>**. Con estas estadísticas, escogemos que acciones vamos descartando y que acciones prometedoras seguimos investigando.
 
 ### Estructura del algoritmo MCTS-UCT
-El algoritmo de MCTS-UCT se divide en 4 fases, seleccion, expansion, simulacion y retropropagacion (backpropagation). El unico parametro que MCTS-UCT necesita es la cantidad de iteraciones que se le permite ejecutar antes de decidir que accion tomar. Llamaremos a este parametro **ITERMAX**.
+El algoritmo de MCTS-UCT se divide en 4 fases, seleccion, expansion, simulacion y retropropagacion (backpropagation). El único parámetro que MCTS-UCT necesita es la cantidad de iteraciones que se le permite ejecutar antes de decidir que accion tomar. Llamaremos a este parametro **ITERMAX**.
 
 MCTS-UCT(estado inicial = **s<sub>t</sub>**, maximas iteraciones = **ITERMAX**) (hacer mas bonito)    
 Inicializar game tree donde el nodo Raiz R representa el estado **s<sub>t</sub>**      
