@@ -79,17 +79,9 @@ La idea de MCTS-UCT es la próxima. Para averiguar que acción **a<sub>t</sub>**
 <br><br>
 
 ### Estructura del algoritmo MCTS-UCT
-El algoritmo de MCTS-UCT se divide en 4 fases, seleccion, expansion, simulacion y retropropagacion (backpropagation). El único parámetro que MCTS-UCT necesita es la cantidad de iteraciones que se le permite ejecutar antes de decidir que accion tomar. Llamaremos a este parametro **ITERMAX**.
+El algoritmo de MCTS-UCT se divide en 4 fases, seleccion, expansion, simulacion y retropropagacion (backpropagation).
 
-MCTS-UCT(estado inicial = **s<sub>t</sub>**, maximas iteraciones = **ITERMAX**) (hacer mas bonito)    
-Inicializar game tree donde el nodo Raiz R representa el estado **s<sub>t</sub>**      
-Repetir durante **ITERMAX** iteraciones:     
-    * **Seleccion**: empezar desde el nodo raíz R y seleccionar nodos hijos sucesivos (Usando la formula UCB1) hasta alcanzar un nodo hoja L. Esto permite que el game tree se expanda hacia movimientos más prometedores, que es la esencia del algoritmo MCTS-UCT.       
-    * **Expansion**: iniciar las estadisicas para el nuevo nodo L.    
-    * **Simulacion**: jugar una partida aleatoria (cada movimiento simulado es una accion valida aleatoria) iniciando la simulacion en el estado representado por el nodo L hasta que la partida simulada termine.     
-    * **Retropropagacion**: utilizar el resultado de la simulacion para actualizar la información en los nodos en el camino de L a R.     
-**Seleccion de accion** escoger que accion tomar basado en las estadisticas calculadas durante las previas iteraciones.     
-END     
+![algoritmo mcts](https://github.com/Danielhp95/mcts-workshop/blob/master/images/algoritmo-mcts.png)
 
 <br>
 
