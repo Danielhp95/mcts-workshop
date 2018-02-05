@@ -91,6 +91,8 @@ Repetir durante **ITERMAX** iteraciones:
 **Seleccion de accion** escoger que accion tomar basado en las estadisticas calculadas durante las previas iteraciones.     
 END     
 
+![algoritmo mcts](https://github.com/Danielhp95/mcts-workshop/blob/master/images/algoritmo-mcts.png)
+
 <br>
 
 #### Selección
