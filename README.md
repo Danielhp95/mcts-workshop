@@ -92,6 +92,7 @@ Repetir durante **ITERMAX** iteraciones:
 END     
 
 <br>
+
 #### Selección
 
 Fórmula de UCB1: ![ucb1](https://latex.codecogs.com/gif.latex?%5Cfrac%7Bw_i%7D%7Bn_i%7D%20&plus;%20c%20%5Csqrt%7B%5Cfrac%7B%5Cln%20N_i%7D%7Bn_i%7D%7D)
